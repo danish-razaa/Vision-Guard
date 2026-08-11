@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Scan Image · VisionGuard{% endblock %}
+{% block content %}
+<section class="section-heading"><div class="eyebrow">SECURE IMAGE ANALYSIS</div><h1>Scan an image</h1><p>Upload a JPG, JPEG, or PNG. The file is decoded and validated before inference.</p></section>
+{% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+<form id="scan-form" class="scanner-panel" action="{{ url_for('web.scan') }}" method="post" enctype="multipart/form-data">
+  <label id="drop-zone" class="drop-zone" for="image-input">
+    <input id="image-input" name="image" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-max-bytes="{{ config.MAX_CONTENT_LENGTH }}" required>
+    <img id="preview" alt="Selected image preview" hidden>
+    <div id="drop-copy"><div class="upload-orb">＋</div><h2>Drop an image here</h2><p>or <span>browse your files</span></p><small>JPG · JPEG · PNG · Maximum {{ (config.MAX_CONTENT_LENGTH / 1048576)|int }} MB</small></div>
+  </label>
+  <div class="file-row"><span id="file-name">No image selected</span><button id="scan-button" class="button primary" type="submit" {% if not model_available %}disabled{% endif %}><span class="button-label">Run security scan</span><span class="spinner" hidden></span></button></div>
+</form>
+<p class="privacy-note">Your original filename is never trusted. Each image is scanned in an isolated temporary directory and deleted immediately after inference; it is never added to the training dataset.</p>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/scanner.js') }}"></script>{% endblock %}

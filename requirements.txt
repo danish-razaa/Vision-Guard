@@ -1,0 +1,17 @@
+flask
+numpy
+pandas
+opencv-python-headless
+scipy
+scikit-image
+scikit-learn
+xgboost
+lightgbm
+catboost
+shap
+joblib
+matplotlib
+fiftyone
+pytest
+pillow
+tqdm

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Model Metrics · VisionGuard{% endblock %}
+{% block content %}
+<section class="section-heading"><div class="eyebrow">MEASURED PERFORMANCE</div><h1>Model metrics</h1><p>Saved engineering smoke-test results. Final claims require the full experiment.</p></section>
+{% if not metrics %}<div class="empty-state"><h2>Model has not been trained yet.</h2><p>Complete feature extraction and training to populate this page.</p></div>{% else %}
+<div class="metric-summary"><div><small>SELECTED MODEL</small><strong>{{ metadata.model_name }}</strong></div><div><small>DATASET SIZE</small><strong>{{ metadata.dataset_size }}</strong></div><div><small>FEATURES</small><strong>{{ metadata.feature_count }}</strong></div><div><small>THRESHOLD</small><strong>{{ '%.2f'|format(metadata.threshold * 100) }}%</strong></div></div>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead><tbody>{% for row in metrics %}<tr><td>{{ row.model_name }}</td><td>{{ '%.3f'|format(row.accuracy) }}</td><td>{{ '%.3f'|format(row.precision) }}</td><td>{{ '%.3f'|format(row.recall) }}</td><td>{{ '%.3f'|format(row.f1) }}</td><td>{{ '%.3f'|format(row.roc_auc) }}</td></tr>{% endfor %}</tbody></table></div>
+<div class="figure-grid">{% for figure in figures %}<img src="{{ url_for('static', filename='generated/' + figure) }}" alt="VisionGuard evaluation figure">{% endfor %}</div>
+<aside class="disclaimer">{{ metadata.result_scope }}. Metrics shown here are loaded from saved experiment files and are never hardcoded.</aside>
+{% endif %}
+{% endblock %}

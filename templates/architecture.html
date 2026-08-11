@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Architecture · VisionGuard{% endblock %}
+{% block content %}
+<section class="section-heading"><div class="eyebrow">SYSTEM DESIGN</div><h1>Five-stage defensive pipeline</h1><p>The same preprocessing and feature code is used during offline training and live inference.</p></section>
+<div class="flow-diagram">
+  {% for number,title,text in [('01','Validated input','Decode and resize to a canonical 256×256 representation.'),('02','Optional smoothing','Generate weak seeded views without erasing anomaly signals.'),('03','Multi-domain features','Fuse statistics, DCT, FFT, LBP/GLCM, and residual evidence.'),('04','ML decision','Align 45 saved features and apply the learned validation threshold.'),('05','Risk + XAI','Separate risk banding from classification and explain leading features.')] %}
+  <article class="flow-step"><span>{{ number }}</span><div><h2>{{ title }}</h2><p>{{ text }}</p></div></article>{% if not loop.last %}<div class="flow-line">↓</div>{% endif %}
+  {% endfor %}
+</div>
+<section class="architecture-notes"><article class="glass-card"><h2>Leakage prevention</h2><p>Each clean image and its manipulated counterpart share a <code>base_id</code> and always remain in the same dataset split.</p></article><article class="glass-card"><h2>Scientific boundary</h2><p>Generated samples are controlled adversarial-like perturbation simulations, not genuine optimized VLM soft-prompts.</p></article></section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Scan Result · VisionGuard{% endblock %}
+{% block content %}
+<section class="result-header {{ 'danger' if result.status == 'SUSPICIOUS' else 'safe' }}">
+  <div><div class="eyebrow">ANALYSIS COMPLETE</div><h1>{{ result.status }}</h1><p>{{ result.model_name }} decision at a {{ '%.2f'|format(result.threshold) }}% classification threshold.</p></div>
+  <div class="risk-badge">{{ result.risk_level }}<small>RISK</small></div>
+</section>
+<div class="result-grid">
+  <article class="glass-card image-card"><img src="{{ image_url }}" alt="Uploaded image"><a class="button ghost full" href="{{ url_for('web.scanner') }}">Scan another image</a></article>
+  <article class="glass-card score-card">
+    <h2>Risk analysis</h2>
+    <div class="score-number">{{ '%.2f'|format(result.attack_probability) }}<small>% suspicious</small></div>
+    <div class="risk-track"><div class="risk-fill {{ result.risk_level|lower }}" style="width: {{ result.attack_probability }}%"></div></div>
+    <div class="probability-row"><span>Clean probability</span><strong>{{ '%.2f'|format(result.clean_probability) }}%</strong></div>
+    <div class="probability-row"><span>Attack probability</span><strong>{{ '%.2f'|format(result.attack_probability) }}%</strong></div>
+    <div class="probability-row"><span>Decision threshold</span><strong>{{ '%.2f'|format(result.threshold) }}%</strong></div>
+  </article>
+</div>
+<section class="explanation-section"><div class="section-heading"><div class="eyebrow">EXPLAINABLE AI</div><h2>Why did the model make this prediction?</h2><p>{{ result.explanation }}</p></div>
+  <div class="explanation-grid"><div class="feature-list">{% for feature in result.top_features %}<div class="feature-item"><div><strong>{{ feature.feature_name }}</strong><small>{{ feature.feature_domain }} · value {{ '%.4g'|format(feature.feature_value) }}</small></div><span class="contribution {{ 'positive' if feature.contribution >= 0 else 'negative' }}">{{ '%+.4f'|format(feature.contribution) }}</span></div>{% else %}<p>Feature attribution is unavailable for this scan.</p>{% endfor %}</div>{% if xai_plot_url %}<img class="xai-plot" src="{{ xai_plot_url }}" alt="Top model feature contributions">{% endif %}</div>
+</section>
+{% endblock %}

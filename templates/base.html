@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VisionGuard input-level security scanner for vision-language models">
+  <title>{% block title %}VisionGuard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('web.home') }}"><span class="brand-mark">V</span>VISIONGUARD</a>
+    <nav aria-label="Primary navigation">
+      <a href="{{ url_for('web.scanner') }}">Scanner</a>
+      <a href="{{ url_for('web.metrics') }}">Metrics</a>
+      <a href="{{ url_for('web.architecture') }}">Architecture</a>
+    </nav>
+  </header>
+  <main class="page-shell">{% block content %}{% endblock %}</main>
+  <footer>VisionGuard · Defensive academic research · Controlled perturbation simulations</footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

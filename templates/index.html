@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}VisionGuard · Input Security{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="eyebrow">INPUT-LEVEL DEFENSE / VISION AI</div>
+  <h1>Inspect the image<br><span>before the model does.</span></h1>
+  <p>VisionGuard analyzes statistical, frequency, texture, and residual signals to flag controlled adversarial-like image perturbations before vision-language processing.</p>
+  <div class="hero-actions"><a class="button primary" href="{{ url_for('web.scanner') }}">Scan an image <span>→</span></a><a class="button ghost" href="{{ url_for('web.architecture') }}">Explore architecture</a></div>
+</section>
+<section class="feature-grid">
+  {% for icon,title,text in [('⌁','Multi-Domain Detection','Fused statistical, DCT, FFT, texture, and residual evidence.'),('◫','Machine Learning','Five classical classifiers evaluated with pair-safe grouped splits.'),('✦','Explainable AI','Top contributing features organized by scientific domain.'),('◉','Real-Time Risk Scoring','Stored-threshold decisions with independent risk levels.')] %}
+  <article class="glass-card"><div class="card-icon">{{ icon }}</div><h2>{{ title }}</h2><p>{{ text }}</p></article>
+  {% endfor %}
+</section>
+<aside class="disclaimer"><strong>Important:</strong> A clean result is not a universal security guarantee. VisionGuard detects patterns learned from controlled perturbation simulations and does not prove an image safe against every attack.</aside>
+{% endblock %}
