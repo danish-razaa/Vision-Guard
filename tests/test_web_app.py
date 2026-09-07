@@ -17,7 +17,7 @@ def _png_bytes() -> io.BytesIO:
 def test_all_get_pages_render() -> None:
     app = create_app({"TESTING": True})
     client = app.test_client()
-    for path in ("/", "/scanner", "/metrics", "/architecture"):
+    for path in ("/", "/scanner", "/prompt-lab", "/metrics", "/architecture"):
         response = client.get(path)
         assert response.status_code == 200
         assert b"VISIONGUARD" in response.data

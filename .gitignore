@@ -25,3 +25,17 @@ static/generated/*
 !models/.gitkeep
 !static/uploads/.gitkeep
 !static/generated/.gitkeep
+
+# Local datasets
+data/development/
+data/external_holdout/
+
+# Local/trained models
+models/development_candidates/
+
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc

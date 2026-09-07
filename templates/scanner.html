@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Scan Image · VisionGuard{% endblock %}
 {% block content %}
-<section class="section-heading"><div class="eyebrow">SECURE IMAGE ANALYSIS</div><h1>Scan an image</h1><p>Upload a JPG, JPEG, or PNG. The file is decoded and validated before inference.</p></section>
+<section class="section-heading"><div class="eyebrow">SECURE IMAGE ANALYSIS</div><h1>Scan an image</h1><p>Choose a model, then upload a JPG, JPEG, or PNG. The server validates the selection and image before running the matching feature pipeline and learned threshold.</p></section>
 {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
 <form id="scan-form" class="scanner-panel" action="{{ url_for('web.scan') }}" method="post" enctype="multipart/form-data">
+  <label class="model-selector">Detection model<select id="scanner-model" name="model_id" required>{% for model in model_options %}<option value="{{ model.id }}" {% if model.id == selected_model_id %}selected{% endif %}>{{ model.label }}</option>{% endfor %}</select><small>The selected artifact and its learned threshold are used for this scan.</small></label>
   <label id="drop-zone" class="drop-zone" for="image-input">
     <input id="image-input" name="image" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-max-bytes="{{ config.MAX_CONTENT_LENGTH }}" required>
     <img id="preview" alt="Selected image preview" hidden>
@@ -13,4 +14,4 @@
 </form>
 <p class="privacy-note">Your original filename is never trusted. Each image is scanned in an isolated temporary directory and deleted immediately after inference; it is never added to the training dataset.</p>
 {% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='js/scanner.js') }}"></script>{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/scanner.js', v='2') }}"></script>{% endblock %}

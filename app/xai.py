@@ -28,6 +28,10 @@ def feature_domain(feature_name: str) -> str:
         return "Texture"
     if feature_name.startswith("residual_"):
         return "Residual"
+    if feature_name.startswith(("msres_", "directional_", "color_residual_")):
+        return "Residual"
+    if feature_name.startswith("spectral_peak_"):
+        return "FFT/Spectral"
     return "Unknown"
 
 
