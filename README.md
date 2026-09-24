@@ -125,42 +125,42 @@ VisionGuard consists of two primary operational paths:
 
 ```mermaid
 flowchart TD
-    subgraph ClientLayer [Web & Client Interface]
-        UI1[Image Scanner UI]
-        UI2[Prompt Injection Lab UI]
-        UI3[Model Metrics UI]
+    subgraph ClientLayer ["Web & Client Interface"]
+        UI1["Image Scanner UI"]
+        UI2["Prompt Injection Lab UI"]
+        UI3["Model Metrics UI"]
     end
 
-    subgraph SecurityLayer [Ingestion & Security Hardening]
-        Val[Upload Validator: Extension, MIME, Pillow verify, OpenCV decode]
-        Store[Sandboxed Storage: UUID filename / Temporary Directory]
+    subgraph SecurityLayer ["Ingestion & Security Hardening"]
+        Val["Upload Validator: Extension, MIME, Pillow verify, OpenCV decode"]
+        Store["Sandboxed Storage: UUID filename / Temporary Directory"]
     end
 
-    subgraph CoreEngine [Core Feature & Smoothing Engine]
-        Prep[Preprocessor: 256x256 BGR / RGB / Grayscale]
-        Smooth[Randomized Smoothing: Multi-view Gaussian noise N=5, sigma=1.0]
-        Extract[Feature Extractor: Statistical, DCT, FFT, Texture, Residual, Color]
+    subgraph CoreEngine ["Core Feature & Smoothing Engine"]
+        Prep["Preprocessor: 256x256 BGR / RGB / Grayscale"]
+        Smooth["Randomized Smoothing: Multi-view Gaussian noise N=5, sigma=1.0"]
+        Extract["Feature Extractor: Statistical, DCT, FFT, Texture, Residual, Color"]
     end
 
-    subgraph InferenceLayer [Model Execution & XAI]
-        Reg[Model Registry: Production RF 45-feat | Development 65-feat]
-        PairDet[Reference-Aware Pair Detector: 130-feat Delta Classifier]
-        XAI[XAI Engine: Tree SHAP / Probability Occlusion Fallback]
-        Risk[Risk Engine: Low <30%, Med 30-60%, High 60-80%, Crit >=80%]
+    subgraph InferenceLayer ["Model Execution & XAI"]
+        Reg["Model Registry: Production RF 45-feat / Development 65-feat"]
+        PairDet["Reference-Aware Pair Detector: 130-feat Delta Classifier"]
+        XAI["XAI Engine: Tree SHAP / Probability Occlusion Fallback"]
+        Risk["Risk Engine: Low <30%, Med 30-60%, High 60-80%, Crit >=80%"]
     end
 
-    subgraph OutputLayer [Outputs & Visualization]
-        Res1[Scan Result: Status, Probabilities, Risk Level, XAI Bar Chart]
-        Res2[Lab Result: Standalone Delta, Pair Confidence, Top Feature Delta]
+    subgraph OutputLayer ["Outputs & Visualization"]
+        Res1["Scan Result: Status, Probabilities, Risk Level, XAI Bar Chart"]
+        Res2["Lab Result: Standalone Delta, Pair Confidence, Top Feature Delta"]
     end
 
-    UI1 -->|POST /scan| Val
-    UI2 -->|POST /api/prompt-perturb| Val
+    UI1 --> Val
+    UI2 --> Val
     Val --> Store --> Prep
     Prep --> Smooth --> Extract
 
-    Extract -->|Single Vector| Reg
-    Extract -->|Original + Modified Vectors| PairDet
+    Extract --> Reg
+    Extract --> PairDet
     Reg --> XAI --> Risk --> Res1
     PairDet --> Res2
 ```
@@ -277,7 +277,7 @@ Computed via 2D Type-II Discrete Cosine Transform on float32 image normalized to
 - `dct_low_energy`: Sum of squared energy in low-frequency mask.
 - `dct_mid_energy`: Sum of squared energy in mid-frequency mask.
 - `dct_high_energy`: Sum of squared energy in high-frequency mask.
-- `dct_high_ratio`: Ratio of high-frequency energy to total energy ($\frac{\text{dct\_high\_energy}}{\text{dct\_total\_energy}}$).
+- `dct_high_ratio`: Ratio of high-frequency energy to total energy ($\frac{\text{High-Frequency Energy}}{\text{Total Energy}}$).
 
 ### Fast Fourier Transform / Spectral Domain (7 Features)
 Computed via 2D Fast Fourier Transform with zero-frequency DC component shifted to center:
