@@ -34,13 +34,15 @@
   - [Production Model (45 Features)](#production-model-45-features)
   - [Development Candidates (65 Features)](#development-candidates-65-features)
   - [Reference-Aware Pair Detector (130 Features)](#reference-aware-pair-detector-130-features)
-- [14. Installation & Local Setup](#14-installation--local-setup)
-- [15. Web Application & Route Reference](#15-web-application--route-reference)
-- [16. Configuration Reference](#16-configuration-reference)
-- [17. Repository Directory Structure](#17-repository-directory-structure)
-- [18. Security Architecture & Upload Hardening](#18-security-architecture--upload-hardening)
-- [19. Scientific Limitations & Non-Claims](#19-scientific-limitations--non-claims)
-- [20. Testing & Verification Suite](#20-testing--verification-suite)
+- [14. Technologies, Frameworks & Libraries](#14-technologies-frameworks--libraries)
+- [15. Installation & Local Setup](#15-installation--local-setup)
+- [16. Web Application & Route Reference](#16-web-application--route-reference)
+- [17. Configuration Reference](#17-configuration-reference)
+- [18. Repository Directory Structure](#18-repository-directory-structure)
+- [19. Security Architecture & Upload Hardening](#19-security-architecture--upload-hardening)
+- [20. Scientific Limitations & Non-Claims](#20-scientific-limitations--non-claims)
+- [21. Testing & Verification Suite](#21-testing--verification-suite)
+- [22. License](#22-license)
 
 ---
 
@@ -546,7 +548,38 @@ Evaluated on the expanded multi-attack benchmark:
 
 ---
 
-## 14. Installation & Local Setup
+## 14. Technologies, Frameworks & Libraries
+
+VisionGuard is constructed using a robust, modular stack combining classical scientific computing, gradient boosting ensembles, explainable AI, and a hardened web interface:
+
+| Category | Technology / Library | Purpose & Implementation Scope |
+| :--- | :--- | :--- |
+| **Language & Runtime** | **Python 3.10+** | Core runtime utilizing strict typing (`dataclasses`, `typing`, `mypy`-compatible type annotations). |
+| **Web Framework & API** | **Flask 3.x** | Application factory architecture (`create_app`), Blueprint routing, session management, and custom HTTP error handlers (e.g., 413 Payload Too Large). |
+| | **Werkzeug** | Multi-part request streaming, file upload boundary validation, and security sanitization. |
+| | **Jinja2** | Server-side template rendering with template inheritance and dynamic metric/result views. |
+| **Machine Learning** | **scikit-learn** | Production Random Forest, development SVM pipelines with `StandardScaler`, `GroupShuffleSplit` group-aware splitting, threshold calibration, and metrics (`f1_score`, `roc_auc_score`, `confusion_matrix`). |
+| | **CatBoost** | Gradient boosted decision trees with native categorical handling and balanced logloss optimization. |
+| | **LightGBM** | Fast histogram-based gradient boosting with balanced class weights. |
+| | **XGBoost** | Scalable tree boosting with regularization and sub-sampling constraints. |
+| **Explainable AI (XAI)** | **SHAP** | `TreeExplainer` for model feature attributions and custom probability-occlusion sensitivity fallback. |
+| **Computer Vision & Signal Processing** | **OpenCV (`opencv-python-headless`)** | Fast C++ image decoding, 2D Discrete Cosine Transform (`cv2.dct`), Sobel directional gradients, Gaussian filtering, and `INTER_AREA`/`INTER_LINEAR` resampling. |
+| | **Pillow (PIL)** | Image header probing, binary format verification, and decompression bomb prevention. |
+| | **SciPy** | Higher-order statistical moments (`scipy.stats.skew`, `scipy.stats.kurtosis`) and 2D Fast Fourier Transform spectral decomposition (`scipy.fft` / `numpy.fft`). |
+| | **scikit-image** | Uniform Local Binary Pattern histograms (`skimage.feature.local_binary_pattern`), multi-angle Gray-Level Co-occurrence Matrices (`graycomatrix`, `graycoprops`), and Shannon entropy (`skimage.measure.shannon_entropy`). |
+| **Data & Serialization** | **NumPy** | Vectorized array operations, multi-view smoothing math, harmonic spectral synthesis, and random seed generators. |
+| | **Pandas** | Tabular feature matrix management, metadata manifests, and CSV/Parquet dataset checkpointing. |
+| | **Joblib** | Serialization and loading of trained estimators, feature column names, and pipeline transformers. |
+| | **tqdm** | Progress monitoring for batch dataset extraction and ablation workflows. |
+| **Dataset Acquisition** | **FiftyOne** | Ingestion, filtering, and caching of COCO-2017 and Open Images v7 clean benchmark subsets from FiftyOne Zoo. |
+| **Visualization & Plots** | **Matplotlib** | Headless (`Agg` backend) generation of ROC curves, PR curves, F1 comparisons, ablation charts, and XAI horizontal attribution plots. |
+| **Testing & Verification** | **Pytest** | Comprehensive test suite covering upload validation, determinism, leakage prevention, XAI, and route endpoints. |
+| **Frontend Architecture** | **Vanilla HTML5 & CSS3** | Modern glassmorphic dark UI, CSS Grid & Flexbox, ambient lighting effects, and responsive design without bloated UI frameworks. |
+| | **Vanilla JavaScript (ES6+)** | Asynchronous Fetch API, client-side FileReader preview, dynamic DOM manipulation, and interactive Prompt Lab controls. |
+
+---
+
+## 15. Installation & Local Setup
 
 ### System Prerequisites
 - **Operating System**: macOS, Linux, or Windows (WSL recommended).
@@ -586,7 +619,7 @@ Evaluated on the expanded multi-attack benchmark:
 
 ---
 
-## 15. Web Application & Route Reference
+## 16. Web Application & Route Reference
 
 VisionGuard includes a modern, responsive web application served via Flask.
 
@@ -612,7 +645,7 @@ VisionGuard includes a modern, responsive web application served via Flask.
 
 ---
 
-## 16. Configuration Reference
+## 17. Configuration Reference
 
 All settings can be customized via environment variables or modified in `config.py`:
 
@@ -634,10 +667,11 @@ All settings can be customized via environment variables or modified in `config.
 
 ---
 
-## 17. Repository Directory Structure
+## 18. Repository Directory Structure
 
 ```
 visionguard/
+├── LICENSE                            # MIT License file
 ├── app.py                             # Local Flask application entry point
 ├── config.py                          # Global configuration and environment settings
 ├── requirements.txt                   # Project dependencies
@@ -737,7 +771,7 @@ visionguard/
 
 ---
 
-## 18. Security Architecture & Upload Hardening
+## 19. Security Architecture & Upload Hardening
 
 VisionGuard is designed with defense-in-depth principles for handling untrusted image uploads:
 
@@ -752,7 +786,7 @@ VisionGuard is designed with defense-in-depth principles for handling untrusted 
 
 ---
 
-## 19. Scientific Limitations & Non-Claims
+## 20. Scientific Limitations & Non-Claims
 
 To maintain academic and scientific integrity, the following boundaries and non-claims are explicitly defined:
 
@@ -764,7 +798,7 @@ To maintain academic and scientific integrity, the following boundaries and non-
 
 ---
 
-## 20. Testing & Verification Suite
+## 21. Testing & Verification Suite
 
 VisionGuard maintains a 100% passing automated test suite covering all modules:
 
@@ -792,16 +826,30 @@ pytest tests/test_prompt_lab_api.py
 
 ---
 
-## 21. License & Academic Context
+## 22. License
 
-VisionGuard was developed as an academic defensive security project for evaluating visual input integrity in vision-language pipelines. 
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for the full text.
 
-**Citation / Attribution:**
-```bibtex
-@software{visionguard2026,
-  title={VisionGuard: Input-Level Security Scanner for Vision-Language Models},
-  author={Raza, Danish},
-  year={2026},
-  url={https://github.com/danish-razaa/Vision-Guard}
-}
+```text
+MIT License
+
+Copyright (c) 2026 VisionGuard Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
