@@ -2,7 +2,7 @@
 {% block title %}Scan Result · VisionGuard{% endblock %}
 {% block content %}
 <section class="result-header {{ 'danger' if result.status == 'SUSPICIOUS' else 'safe' }}">
-  <div><div class="eyebrow">ANALYSIS COMPLETE</div><h1>{{ result.status }}</h1><p>{{ result.model_name }} decision at a {{ '%.2f'|format(result.threshold) }}% classification threshold.</p></div>
+  <div><div class="eyebrow">ANALYSIS COMPLETE · SELECTED MODEL</div><h1>{{ result.status }}</h1><p>{{ result.model_name }} decision at its saved {{ '%.2f'|format(result.threshold) }}% classification threshold.</p></div>
   <div class="risk-badge">{{ result.risk_level }}<small>RISK</small></div>
 </section>
 <div class="result-grid">

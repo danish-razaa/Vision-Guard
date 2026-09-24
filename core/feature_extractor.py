@@ -12,6 +12,10 @@ import numpy as np
 from core.dct_features import DCT_FEATURE_NAMES, extract_dct_features
 from core.fft_features import FFT_FEATURE_NAMES, extract_fft_features
 from core.preprocessing import preprocess_image
+from core.perturbation_sensitive_features import (
+    PERTURBATION_SENSITIVE_FEATURE_NAMES,
+    extract_perturbation_sensitive_features,
+)
 from core.residual_features import RESIDUAL_FEATURE_NAMES, extract_residual_features
 from core.smoothing import SmoothingConfig, generate_smoothing_views
 from core.statistical_features import (
@@ -26,6 +30,7 @@ FEATURE_NAMES = (
     + DCT_FEATURE_NAMES
     + FFT_FEATURE_NAMES
     + TEXTURE_FEATURE_NAMES
+    + PERTURBATION_SENSITIVE_FEATURE_NAMES
     + RESIDUAL_FEATURE_NAMES
 )
 
@@ -46,6 +51,7 @@ def _single_view_features(bgr_image: np.ndarray) -> dict[str, float]:
         extract_residual_features,
     ):
         features.update(extractor(grayscale))
+    features.update(extract_perturbation_sensitive_features(bgr_image))
     return features
 
 

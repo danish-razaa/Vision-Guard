@@ -18,7 +18,7 @@ def _write_test_image(path: Path) -> None:
 
 def test_feature_names_are_unique_and_stable() -> None:
     names = get_feature_names()
-    assert len(names) == 45
+    assert len(names) == 65
     assert len(names) == len(set(names))
     assert names[:3] == ["stat_mean", "stat_variance", "stat_std"]
     assert names[-4:] == [
@@ -36,7 +36,7 @@ def test_extraction_is_finite_ordered_and_deterministic(tmp_path: Path) -> None:
     second = extract_features(path, {"enabled": False})
 
     assert list(first) == get_feature_names()
-    assert len(first) == 45
+    assert len(first) == 65
     assert np.all(np.isfinite(list(first.values())))
     assert first == second
 

@@ -8,6 +8,7 @@ import logging
 import os
 import shutil
 import sys
+import types
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
@@ -77,6 +78,29 @@ def _load_coco_dataset(max_samples: int, seed: int):
     os.environ.setdefault("FIFTYONE_DATASET_ZOO_DIR", str(DEFAULT_FIFTYONE_DIR))
     os.environ.setdefault("FIFTYONE_DATABASE_DIR", str(DEFAULT_FIFTYONE_DATABASE_DIR))
     os.environ.setdefault("MPLCONFIGDIR", str(PROJECT_ROOT / "data" / "raw" / "matplotlib"))
+
+    compatibility_root = PROJECT_ROOT / "training" / "_compat"
+    if str(compatibility_root) not in sys.path:
+        sys.path.insert(0, str(compatibility_root))
+    existing_pythonpath = os.environ.get("PYTHONPATH", "")
+    os.environ["PYTHONPATH"] = str(compatibility_root) + (
+        os.pathsep + existing_pythonpath if existing_pythonpath else ""
+    )
+
+    # ETA versions bundled with some FiftyOne releases still import the
+    # removed Python 3.12 ``distutils.version.LooseVersion``. Supply the small
+    # compatibility surface they require without changing the environment.
+    try:
+        from distutils.version import LooseVersion as _loose_version  # type: ignore[import-not-found]
+    except ModuleNotFoundError:
+        from packaging.version import Version as _loose_version
+
+        distutils_module = types.ModuleType("distutils")
+        version_module = types.ModuleType("distutils.version")
+        version_module.LooseVersion = _loose_version
+        distutils_module.version = version_module
+        sys.modules.setdefault("distutils", distutils_module)
+        sys.modules.setdefault("distutils.version", version_module)
 
     import fiftyone as fo
     import fiftyone.zoo as foz

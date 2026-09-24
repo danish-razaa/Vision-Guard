@@ -57,6 +57,8 @@ class VisionGuardInference:
         feature_columns_path: str | Path = Config.FEATURE_COLUMNS_PATH,
         metadata_path: str | Path = Config.MODEL_METADATA_PATH,
         smoothing_config: SmoothingConfig | None = None,
+        threshold_override: float | None = None,
+        model_name_override: str | None = None,
     ) -> None:
         self.model_path = Path(model_path).expanduser().resolve()
         self.feature_columns_path = Path(feature_columns_path).expanduser().resolve()
@@ -90,7 +92,11 @@ class VisionGuardInference:
         if int(self.metadata.get("feature_count", -1)) != len(self.feature_columns):
             raise InferenceConfigurationError("model metadata feature_count is inconsistent")
         try:
-            self.threshold = float(self.metadata["threshold"])
+            self.threshold = float(
+                self.metadata["threshold"]
+                if threshold_override is None
+                else threshold_override
+            )
         except (KeyError, TypeError, ValueError) as exc:
             raise InferenceConfigurationError("model metadata has no valid threshold") from exc
         if not np.isfinite(self.threshold) or not 0 <= self.threshold <= 1:
@@ -107,6 +113,8 @@ class VisionGuardInference:
             views=Config.SMOOTHING_VIEWS,
             sigma=Config.SMOOTHING_SIGMA,
         )
+        if model_name_override:
+            self.metadata["model_name"] = model_name_override
         self.xai = XAIExplainer(self.model, self.feature_columns)
         LOGGER.info(
             "Loaded %s with %d features and threshold %.6f",
