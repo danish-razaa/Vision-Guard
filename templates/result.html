@@ -16,7 +16,111 @@
     <div class="probability-row"><span>Decision threshold</span><strong>{{ '%.2f'|format(result.threshold) }}%</strong></div>
   </article>
 </div>
-<section class="explanation-section"><div class="section-heading"><div class="eyebrow">EXPLAINABLE AI</div><h2>Why did the model make this prediction?</h2><p>{{ result.explanation }}</p></div>
-  <div class="explanation-grid"><div class="feature-list">{% for feature in result.top_features %}<div class="feature-item"><div><strong>{{ feature.feature_name }}</strong><small>{{ feature.feature_domain }} · value {{ '%.4g'|format(feature.feature_value) }}</small></div><span class="contribution {{ 'positive' if feature.contribution >= 0 else 'negative' }}">{{ '%+.4f'|format(feature.contribution) }}</span></div>{% else %}<p>Feature attribution is unavailable for this scan.</p>{% endfor %}</div>{% if xai_plot_url %}<img class="xai-plot" src="{{ xai_plot_url }}" alt="Top model feature contributions">{% endif %}</div>
+<section class="explanation-section">
+  <div class="section-heading">
+    <div class="eyebrow">EXPLAINABLE AI</div>
+    <h2>Why did the model make this prediction?</h2>
+    <p>{{ result.explanation }}</p>
+  </div>
+
+  {% if result.layman_summary %}
+  <article class="layman-card">
+    <div class="layman-card-header">
+      <div class="badge-nlp">✨ NATURAL LANGUAGE EXPLANATION · FOR EVERYONE</div>
+    </div>
+    <h3 class="layman-headline">{{ result.layman_summary.headline }}</h3>
+    <p class="layman-narrative">{{ result.layman_summary.narrative }}</p>
+    
+    <div class="analogy-box">
+      <div class="analogy-icon">💡</div>
+      <div class="analogy-content">
+        <strong>Real-World Analogy</strong>
+        <p>{{ result.layman_summary.analogy }}</p>
+      </div>
+    </div>
+
+    <div class="takeaways-heading">Key Takeaways</div>
+    <ul class="takeaways-list">
+      {% for takeaway in result.layman_summary.takeaways %}
+      <li>{{ takeaway }}</li>
+      {% endfor %}
+    </ul>
+  </article>
+  {% endif %}
+
+  <div class="perspective-tabs">
+    <button type="button" class="tab-btn active" id="tab-plain-btn" onclick="switchXaiTab('plain')">Plain-English Insights</button>
+    <button type="button" class="tab-btn" id="tab-tech-btn" onclick="switchXaiTab('tech')">Technical Feature Attribution</button>
+  </div>
+
+  <div id="view-plain-signals">
+    <div class="explanation-grid">
+      <div class="layman-feature-list">
+        {% for feature in result.layman_insights %}
+        <div class="layman-feature-item">
+          <div class="layman-feature-header">
+            <span class="layman-feature-title">{{ feature.title }}</span>
+            <span class="layman-feature-badge {{ 'badge-flag-suspicious' if feature.is_suspicious_signal else 'badge-flag-clean' }}">
+              {{ '🔴 ' + feature.vote if feature.is_suspicious_signal else '🔵 ' + feature.vote }}
+            </span>
+          </div>
+          <p class="layman-feature-desc">{{ feature.plain_explanation }}</p>
+          <div class="layman-feature-meta">
+            <span>Domain: {{ feature.domain }}</span>
+            <span>Raw Code: {{ feature.feature_name }}</span>
+            <span>Score: {{ '%+.4f'|format(feature.contribution) }}</span>
+          </div>
+        </div>
+        {% else %}
+        <p>Plain-language feature insights are currently unavailable.</p>
+        {% endfor %}
+      </div>
+      {% if xai_plot_url %}
+      <img class="xai-plot" src="{{ xai_plot_url }}" alt="Top model feature contributions">
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="view-tech-signals" style="display: none;">
+    <div class="explanation-grid">
+      <div class="feature-list">
+        {% for feature in result.top_features %}
+        <div class="feature-item">
+          <div>
+            <strong>{{ feature.feature_name }}</strong>
+            <small>{{ feature.feature_domain }} · value {{ '%.4g'|format(feature.feature_value) }}</small>
+          </div>
+          <span class="contribution {{ 'positive' if feature.contribution >= 0 else 'negative' }}">{{ '%+.4f'|format(feature.contribution) }}</span>
+        </div>
+        {% else %}
+        <p>Feature attribution is unavailable for this scan.</p>
+        {% endfor %}
+      </div>
+      {% if xai_plot_url %}
+      <img class="xai-plot" src="{{ xai_plot_url }}" alt="Top model feature contributions">
+      {% endif %}
+    </div>
+  </div>
 </section>
+{% endblock %}
+{% block scripts %}
+<script>
+function switchXaiTab(tab) {
+  const plainView = document.getElementById('view-plain-signals');
+  const techView = document.getElementById('view-tech-signals');
+  const plainBtn = document.getElementById('tab-plain-btn');
+  const techBtn = document.getElementById('tab-tech-btn');
+  if (tab === 'plain') {
+    if (plainView) plainView.style.display = 'block';
+    if (techView) techView.style.display = 'none';
+    if (plainBtn) plainBtn.classList.add('active');
+    if (techBtn) techBtn.classList.remove('active');
+  } else {
+    if (plainView) plainView.style.display = 'none';
+    if (techView) techView.style.display = 'block';
+    if (plainBtn) plainBtn.classList.remove('active');
+    if (techBtn) techBtn.classList.add('active');
+  }
+}
+</script>
 {% endblock %}

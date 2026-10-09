@@ -175,6 +175,8 @@ class VisionGuardInference:
             "risk_level": risk_level(attack_percentage),
             "top_features": explanation["top_features"],
             "explanation": explanation["explanation"],
+            "layman_summary": explanation.get("layman_summary"),
+            "layman_insights": explanation.get("layman_insights", []),
             "xai_available": explanation["xai_available"],
             "xai_method": explanation["method"],
             "xai_plot_path": explanation["plot_path"],

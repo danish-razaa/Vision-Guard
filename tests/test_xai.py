@@ -53,3 +53,26 @@ def test_explanation_failure_is_isolated() -> None:
     assert not result["xai_available"]
     assert result["top_features"] == []
     assert "prediction is still valid" in result["explanation"]
+
+
+def test_plain_english_translation_and_narrative() -> None:
+    from app.xai import explain_feature_in_plain_english, generate_layman_narrative
+
+    lbp_explanation = explain_feature_in_plain_english("lbp_uniform_bin_02", 0.0566, 0.042)
+    assert lbp_explanation["title"].startswith("Micro-Texture Noise")
+    assert lbp_explanation["is_suspicious_signal"] is True
+    assert "Supports Suspicious" in lbp_explanation["vote"]
+    assert "micro-grain" in lbp_explanation["plain_explanation"].lower()
+
+    stat_explanation = explain_feature_in_plain_english("stat_max", 255.0, 0.023)
+    assert "Peak Pixel Brightness Ceiling" in stat_explanation["title"]
+    assert "saturation" in stat_explanation["plain_explanation"].lower()
+
+    narrative = generate_layman_narrative(
+        [{"contribution": 0.04}, {"contribution": 0.03}],
+        ["Texture", "Statistical"],
+    )
+    assert "banknote" in narrative["analogy"].lower()
+    assert "Explainable AI" in narrative["narrative"]
+    assert len(narrative["takeaways"]) >= 2
+

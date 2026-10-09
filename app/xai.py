@@ -35,6 +35,192 @@ def feature_domain(feature_name: str) -> str:
     return "Unknown"
 
 
+def explain_feature_in_plain_english(
+    feature_name: str,
+    value: float,
+    contribution: float,
+) -> dict[str, Any]:
+    """Translate technical feature metrics into layperson-friendly concepts."""
+    domain = feature_domain(feature_name)
+    is_suspicious_signal = contribution >= 0
+    vote = "Supports Suspicious" if is_suspicious_signal else "Supports Clean"
+
+    if feature_name.startswith("lbp_uniform_bin_"):
+        bin_suffix = feature_name.replace("lbp_uniform_bin_", "")
+        title = f"Micro-Texture Noise (Pattern #{bin_suffix})"
+        if is_suspicious_signal:
+            desc = (
+                f"Abnormal micro-grain static detected (value {value:.4g}). "
+                "Natural photos have smooth, organic transitions, whereas digital "
+                "attacks create unnatural microscopic pixel irregularities."
+            )
+        else:
+            desc = (
+                f"Natural micro-grain transition (value {value:.4g}), consistent "
+                "with standard photographic lens captures."
+            )
+    elif feature_name.startswith("glcm_"):
+        prop = feature_name.replace("glcm_", "").replace("_", " ").title()
+        title = f"Surface Texture Regularity ({prop})"
+        if is_suspicious_signal:
+            desc = (
+                f"Disrupted spatial patterns in surface shading (value {value:.4g}). "
+                "Adversarial perturbations alter the expected texture continuity."
+            )
+        else:
+            desc = (
+                f"Coherent surface texture distribution (value {value:.4g}), "
+                "characteristic of authentic images."
+            )
+    elif feature_name == "stat_max":
+        title = "Peak Pixel Brightness Ceiling"
+        if value >= 254:
+            desc = (
+                f"Pixel saturation clipped at maximum limit ({value:.0f}). "
+                "Mathematical perturbation scripts often push pixel values to the ceiling."
+            )
+        else:
+            desc = f"Maximum pixel intensity ({value:.4g}) within standard exposure boundaries."
+    elif feature_name == "stat_min":
+        title = "Minimum Black Level Floor"
+        if value <= 1:
+            desc = (
+                f"Pixels clamped to absolute black ({value:.0f}). "
+                "Indicates artificial numerical boundary clipping."
+            )
+        else:
+            desc = f"Minimum shadow intensity ({value:.4g}) is within natural photographic range."
+    elif feature_name in ("stat_std", "stat_variance"):
+        title = "Pixel Contrast Variance"
+        if is_suspicious_signal:
+            desc = (
+                f"Unusual spread in pixel contrast (value {value:.4g}), indicating "
+                "added synthetic static across image channels."
+            )
+        else:
+            desc = f"Natural dynamic range and contrast variation ({value:.4g})."
+    elif feature_name == "stat_mean":
+        title = "Average Brightness Exposure"
+        desc = f"Mean channel exposure level ({value:.4g}) across the image."
+    elif feature_name.startswith("stat_"):
+        metric = feature_name.replace("stat_", "").title()
+        title = f"Statistical Distribution ({metric})"
+        desc = (
+            f"Mathematical distribution anomaly in pixel brightness (value {value:.4g})."
+            if is_suspicious_signal
+            else f"Standard pixel intensity distribution (value {value:.4g})."
+        )
+    elif feature_name.startswith("dct_"):
+        title = "Frequency Compression Signature (DCT)"
+        if is_suspicious_signal:
+            desc = (
+                f"High-frequency mathematical artifacts found in frequency analysis (value {value:.4g}), "
+                "typical of adversarial perturbation noise."
+            )
+        else:
+            desc = f"Organic frequency falloff curve (value {value:.4g}) matching natural lens captures."
+    elif (
+        feature_name.startswith("fft_")
+        or feature_name == "spectral_entropy"
+        or feature_name.startswith("spectral_")
+    ):
+        title = "Periodic Frequency Harmonics (FFT)"
+        if is_suspicious_signal:
+            desc = (
+                f"Synthetic periodic frequency spikes detected (value {value:.4g}). "
+                "These harmonic patterns are invisible to human eyes but detectable in the frequency domain."
+            )
+        else:
+            desc = f"Smooth, non-repetitive spectral energy distribution (value {value:.4g})."
+    elif feature_name.startswith(
+        ("residual_", "msres_", "directional_", "color_residual_")
+    ):
+        title = "High-Pass Noise Residue"
+        if is_suspicious_signal:
+            desc = (
+                f"Filtering out the visible subject revealed an underlying artificial noise residue "
+                f"(value {value:.4g}) embedded beneath the image."
+            )
+        else:
+            desc = f"Minimal noise residue ({value:.4g}), fully consistent with camera sensor noise."
+    elif feature_name.startswith(("perturbation_sensitive_", "laplacian_")):
+        title = "Edge Perturbation Gradient"
+        if is_suspicious_signal:
+            desc = (
+                f"Sharp localized micro-gradient spikes (value {value:.4g}) characteristic of "
+                "algorithmic manipulation."
+            )
+        else:
+            desc = f"Soft, natural optical edges ({value:.4g}) with no artificial boundary spikes."
+    else:
+        title = feature_name.replace("_", " ").title()
+        desc = f"{domain} signal (value {value:.4g}) pushing the model towards {vote.lower()}."
+
+    return {
+        "feature_name": feature_name,
+        "title": title,
+        "domain": domain,
+        "vote": vote,
+        "is_suspicious_signal": is_suspicious_signal,
+        "contribution": contribution,
+        "feature_value": value,
+        "plain_explanation": desc,
+    }
+
+
+def generate_layman_narrative(
+    top_features: list[dict[str, Any]],
+    domains: list[str],
+) -> dict[str, Any]:
+    """Produce a high-level plain-English narrative with real-world analogies."""
+    suspicious_count = sum(1 for f in top_features if f.get("contribution", 0) >= 0)
+    clean_count = len(top_features) - suspicious_count
+    primary_domain = domains[0] if domains else "Texture"
+    domain_list = ", ".join(domains) if domains else "Texture and Statistical"
+
+    if suspicious_count >= clean_count:
+        headline = "Invisible Micro-Texture Anomalies & Pixel Distortions Detected"
+        narrative = (
+            "To the human eye, this image appears ordinary. However, our Explainable AI detected "
+            f"invisible microscopic irregularities primarily in the {domain_list} domain(s). "
+            "These artificial micro-patterns and pixel distributions strongly suggest the image has been "
+            "digitally altered or embedded with adversarial perturbations rather than captured by a standard camera."
+        )
+        analogy = (
+            "Think of this like inspecting a counterfeit banknote: from arm's length it looks genuine, "
+            "but under magnification the microscopic ink patterns and fiber textures reveal that it was "
+            "produced by an unauthorized digital printer."
+        )
+        takeaways = [
+            f"Microscopic static detected across the {primary_domain} domain.",
+            "Pixels exhibit mathematical boundaries and artificial noise profiles uncommon in natural photography.",
+            "Positive contribution scores confirm these anomalies actively drove the suspicious classification.",
+        ]
+    else:
+        headline = "Natural Optical Characteristics & Coherent Pixel Gradients Verified"
+        narrative = (
+            "To the human eye and our AI analysis, this image shows natural optical characteristics "
+            f"typical of an authentic, unmanipulated photograph. The micro-textures and pixel distributions "
+            f"across {domain_list} domains show no evidence of synthetic perturbations or adversarial noise."
+        )
+        analogy = (
+            "Like checking a genuine watermark under ultraviolet light, the image's microscopic pixel "
+            "transitions align seamlessly with authentic camera optics and natural sensor physics."
+        )
+        takeaways = [
+            f"Organic micro-patterns confirmed in {domain_list} domain(s).",
+            "No evidence of mathematical pixel clipping or synthetic high-frequency static.",
+            "Feature contributions support a clean, untampered verdict.",
+        ]
+
+    return {
+        "headline": headline,
+        "narrative": narrative,
+        "analogy": analogy,
+        "takeaways": takeaways,
+    }
+
+
 def _positive_class_probability(
     model: Any, values: np.ndarray, feature_names: Sequence[str] | None = None
 ) -> np.ndarray:
@@ -167,6 +353,13 @@ class XAIExplainer:
                 for index in order
             ]
             domains = list(dict.fromkeys(item["feature_domain"] for item in top_features))
+            layman_insights = [
+                explain_feature_in_plain_english(
+                    item["feature_name"], item["feature_value"], item["contribution"]
+                )
+                for item in top_features
+            ]
+            layman_summary = generate_layman_narrative(top_features, domains)
             explanation = (
                 "These features contributed most strongly to the model prediction. "
                 f"The leading signals came from {', '.join(domains)} domains. "
@@ -186,6 +379,8 @@ class XAIExplainer:
                 "method": self._last_method,
                 "plot_path": written_plot,
                 "xai_available": True,
+                "layman_summary": layman_summary,
+                "layman_insights": layman_insights,
             }
         except Exception as exc:
             LOGGER.exception("XAI explanation failed")
@@ -195,6 +390,8 @@ class XAIExplainer:
                 "method": "unavailable",
                 "plot_path": None,
                 "xai_available": False,
+                "layman_summary": None,
+                "layman_insights": [],
                 "error": str(exc),
             }
 
