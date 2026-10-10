@@ -1,16 +1,235 @@
 {% extends "base.html" %}
-{% block title %}VisionGuard · Input Security{% endblock %}
+{% block title %}VisionGuard · Input-Level Defense for Vision AI{% endblock %}
 {% block content %}
-<section class="hero">
-  <div class="eyebrow">INPUT-LEVEL DEFENSE / VISION AI</div>
-  <h1>Inspect the image<br><span>before the model does.</span></h1>
-  <p>VisionGuard analyzes statistical, frequency, texture, and residual signals with selectable production and development classifiers, plus reference-aware comparison for controlled prompt-conditioned experiments.</p>
-  <div class="hero-actions"><a class="button primary" href="{{ url_for('web.scanner') }}">Scan an image <span>→</span></a><a class="button ghost" href="{{ url_for('web.architecture') }}">Explore architecture</a></div>
+
+<!-- HERO SECTION (DARK BACKGROUND) -->
+<section class="hero-section">
+  <div class="content-container">
+    <div class="hero-split">
+      <!-- Left Column: Copy & CTAs -->
+      <div class="hero-copy">
+        <div class="eyebrow">INPUT-LEVEL DEFENSE FOR VISION AI</div>
+        <h1 class="hero-title">
+          Inspect the image<br>
+          before the model does.
+        </h1>
+        <p class="hero-text">
+          VisionGuard analyzes statistical, frequency, texture and residual signals to flag manipulated images, with selectable classifiers and reference-aware comparison for controlled prompt experiments.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="{{ url_for('web.scanner') }}">Scan an image</a>
+          <a class="button ghost" href="{{ url_for('web.architecture') }}">View architecture</a>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Code/Terminal Preview Card -->
+      <div class="hero-visual">
+        <div class="terminal-card">
+          <div class="terminal-top">
+            <span class="terminal-filename">scan_result.json</span>
+            <span class="terminal-tag">RandomForest · production</span>
+          </div>
+          <div class="terminal-content">
+            <div class="verdict-row">
+              <span class="verdict-label">Verdict</span>
+              <span class="verdict-badge">MANIPULATED</span>
+            </div>
+
+            <div class="risk-bar-container">
+              <div class="risk-bar-header">
+                <span class="risk-label">risk score</span>
+                <span class="risk-threshold">threshold 0.490</span>
+              </div>
+              <div class="risk-track">
+                <div class="risk-fill" style="width: 78%;"></div>
+              </div>
+            </div>
+
+            <div class="signal-triad">
+              <div class="signal-item">
+                <span class="signal-domain">Frequency</span>
+                <span class="signal-value high">High</span>
+              </div>
+              <div class="signal-item">
+                <span class="signal-domain">Texture</span>
+                <span class="signal-value med">Medium</span>
+              </div>
+              <div class="signal-item">
+                <span class="signal-domain">Residual</span>
+                <span class="signal-value high">High</span>
+              </div>
+            </div>
+
+            <div class="terminal-caption">
+              Illustrative layout. Scores shown are placeholders.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="feature-grid">
-  {% for icon,title,text in [('⌁','Multi-Domain Detection','Fused statistical, DCT, FFT, texture, and residual evidence.'),('◫','Selectable Models','Choose the production detector or one of five expanded-dataset development classifiers.'),('✦','Explainable AI','Model-specific top feature contributions organized by scientific domain.'),('◉','Pair-Aware Prompt Lab','Compare original and modified images with a separately trained reference-aware detector.')] %}
-  <article class="glass-card"><div class="card-icon">{{ icon }}</div><h2>{{ title }}</h2><p>{{ text }}</p></article>
-  {% endfor %}
+
+<!-- LIGHT SECTIONS WRAPPER (WHITE BACKGROUND) -->
+<div class="light-wrapper">
+  <div class="content-container">
+    
+    <!-- STATS COUNTER ROW -->
+    <section class="stats-row">
+      <div class="stat-box">
+        <div class="stat-number">80.0%</div>
+        <div class="stat-label">RandomForest accuracy, 45 features</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">97.5%</div>
+        <div class="stat-label">Pair detector accuracy, 100% precision</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">3,500</div>
+        <div class="stat-label">Evaluation images from 500 base IDs</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">16 MB</div>
+        <div class="stat-label">Max upload, JPG / JPEG / PNG</div>
+      </div>
+    </section>
+
+    <!-- THREE TOOLS, ONE WORKFLOW -->
+    <section class="workflow-section">
+      <div class="section-title-wrap">
+        <h2 class="section-heading-dark">Three tools, one workflow</h2>
+        <p class="section-sub-dark">
+          Scan single images, run controlled perturbation experiments, and review benchmark results in one place.
+        </p>
+      </div>
+
+      <div class="workflow-grid">
+        <a class="tool-card" href="{{ url_for('web.scanner') }}">
+          <div class="tool-endpoint">POST /scan</div>
+          <h3 class="tool-title">Scanner</h3>
+          <p class="tool-desc">
+            Drag-and-drop upload, model selector, risk badges and SHAP plots using the selected model's learned threshold.
+          </p>
+        </a>
+
+        <a class="tool-card" href="{{ url_for('web.prompt_lab') }}">
+          <div class="tool-endpoint">POST /api/prompt-perturb</div>
+          <h3 class="tool-title">Prompt Injection Lab</h3>
+          <p class="tool-desc">
+            Turn text into a bounded perturbation, compare against the original, and view 16× amplified delta maps.
+          </p>
+        </a>
+
+        <a class="tool-card" href="{{ url_for('web.metrics') }}">
+          <div class="tool-endpoint">GET /metrics</div>
+          <h3 class="tool-title">Model Metrics</h3>
+          <p class="tool-desc">
+            Benchmarks, confusion matrices and statistical curves for production, development and pair detectors.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- PRODUCTION BENCHMARK TABLE -->
+    <section class="benchmark-section">
+      <div class="section-title-wrap">
+        <h2 class="section-heading-dark">Production benchmark</h2>
+        <p class="section-sub-dark">
+          45 features, held-out test N=30 (15 clean, 15 manipulated COCO-2017 base IDs). Engineering smoke test.
+        </p>
+      </div>
+
+      <div class="benchmark-table-wrapper">
+        <table class="benchmark-table">
+          <thead>
+            <tr>
+              <th>MODEL</th>
+              <th>THRESHOLD</th>
+              <th>ACCURACY</th>
+              <th>PRECISION</th>
+              <th>RECALL</th>
+              <th>F1</th>
+              <th>ROC-AUC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="model-name">RandomForest</span>
+                <span class="badge-production">Production</span>
+              </td>
+              <td>49.0%</td>
+              <td><strong>80.0%</strong></td>
+              <td>84.6%</td>
+              <td>73.3%</td>
+              <td>0.786</td>
+              <td>0.913</td>
+            </tr>
+            <tr>
+              <td><span class="model-name">XGBoost</span></td>
+              <td>26.9%</td>
+              <td><strong>80.0%</strong></td>
+              <td>80.0%</td>
+              <td>80.0%</td>
+              <td>0.800</td>
+              <td>0.893</td>
+            </tr>
+            <tr>
+              <td><span class="model-name">LightGBM</span></td>
+              <td>63.1%</td>
+              <td><strong>73.3%</strong></td>
+              <td>88.9%</td>
+              <td>53.3%</td>
+              <td>0.667</td>
+              <td>0.889</td>
+            </tr>
+            <tr>
+              <td><span class="model-name">CatBoost</span></td>
+              <td>32.7%</td>
+              <td><strong>73.3%</strong></td>
+              <td>73.3%</td>
+              <td>73.3%</td>
+              <td>0.733</td>
+              <td>0.880</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- HARDENED INGESTION BOUNDARY (DARK SECTION) -->
+<section class="ingestion-section">
+  <div class="content-container">
+    <h2 class="ingestion-title">Built with a hardened ingestion boundary</h2>
+    <div class="ingestion-grid">
+      <div class="ingestion-card">
+        <div class="ingestion-category">VALIDATE</div>
+        <h3 class="ingestion-subheading">Multi-tier validator</h3>
+        <p class="ingestion-text">
+          Extension whitelist, 16 MB limit and Pillow header verification.
+        </p>
+      </div>
+
+      <div class="ingestion-card">
+        <div class="ingestion-category">DECODE</div>
+        <h3 class="ingestion-subheading">Sandboxed decompression</h3>
+        <p class="ingestion-text">
+          Full OpenCV decode in an isolated RAM buffer to stop zip bombs and truncated files.
+        </p>
+      </div>
+
+      <div class="ingestion-card">
+        <div class="ingestion-category">STORE</div>
+        <h3 class="ingestion-subheading">Ephemeral sessions</h3>
+        <p class="ingestion-text">
+          UUID-scoped directories, auto-pruned after 3600 seconds.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
-<aside class="disclaimer"><strong>Important:</strong> Development models are available for comparison but are not promoted production models. A clean result is not a universal security guarantee, and the pair detector requires an original reference image.</aside>
+
 {% endblock %}

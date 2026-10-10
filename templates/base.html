@@ -3,25 +3,59 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="VisionGuard input-level security scanner for vision-language models">
+  <meta name="description" content="VisionGuard input-level defense for vision AI">
   <title>{% block title %}VisionGuard{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='2') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/prompt_lab.css', v='3') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='12') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/prompt_lab.css', v='12') }}">
 </head>
-<body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<body class="site-body">
   <header class="site-header">
-    <a class="brand" href="{{ url_for('web.home') }}"><span class="brand-mark">V</span>VISIONGUARD</a>
-    <nav aria-label="Primary navigation">
-      <a href="{{ url_for('web.home') }}">Home</a>
-      <a href="{{ url_for('web.scanner') }}">Scanner</a>
-      <a href="{{ url_for('web.prompt_lab') }}">Prompt Injection Lab</a>
-      <a href="{{ url_for('web.metrics') }}">Model Metrics</a>
-      <a href="{{ url_for('web.architecture') }}">Architecture</a>
-    </nav>
+    <div class="header-inner">
+      <a class="brand" href="{{ url_for('web.home') }}">
+        <span class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L3 7V12C3 17.5 7 21.5 12 23C17 21.5 21 17.5 21 12V7L12 2Z" stroke="#f05a28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" fill="#f05a28"/>
+          </svg>
+        </span>
+        <span class="brand-text">VISIONGUARD</span>
+      </a>
+
+      <nav aria-label="Primary navigation" class="main-nav">
+        <a href="{{ url_for('web.scanner') }}">Scanner</a>
+        <a href="{{ url_for('web.prompt_lab') }}">Prompt Injection Lab</a>
+        <a href="{{ url_for('web.metrics') }}">Model Metrics</a>
+        <a href="{{ url_for('web.architecture') }}">Architecture</a>
+      </nav>
+
+      <div class="header-action">
+        <a class="nav-cta-btn" href="{{ url_for('web.scanner') }}">Scan an image</a>
+      </div>
+    </div>
   </header>
-  <main class="page-shell">{% block content %}{% endblock %}</main>
-  <footer>VisionGuard · Defensive academic research · Controlled perturbation simulations</footer>
+
+  <main class="{% if request.path == '/' %}page-home{% else %}page-shell{% endif %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">VisionGuard</div>
+      <div class="footer-nav">
+        <a href="{{ url_for('web.scanner') }}">Scanner</a>
+        <span class="footer-sep">·</span>
+        <a href="{{ url_for('web.prompt_lab') }}">Prompt Injection Lab</a>
+        <span class="footer-sep">·</span>
+        <a href="{{ url_for('web.metrics') }}">Model Metrics</a>
+        <span class="footer-sep">·</span>
+        <a href="{{ url_for('web.architecture') }}">Architecture</a>
+      </div>
+    </div>
+  </footer>
+
   {% block scripts %}{% endblock %}
 </body>
 </html>
