@@ -26,4 +26,4 @@ RUN mkdir -p static/uploads static/generated
 EXPOSE 5001
 
 # Run with Gunicorn production WSGI server
-CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:${PORT:-5001} --workers 2 --timeout 120"]
+CMD ["sh", "-c", "gunicorn wsgi:app --bind 0.0.0.0:${PORT:-5001} --workers 2 --timeout 120"]

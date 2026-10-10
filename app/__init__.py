@@ -81,3 +81,17 @@ def create_app(test_config: dict[str, object] | None = None) -> Flask:
         ), 413
 
     return app
+
+
+_cached_app = None
+
+
+def __getattr__(name: str):
+    """Allow 'from app import app' or 'gunicorn app:app' to resolve the factory instance."""
+    global _cached_app
+    if name == "app":
+        if _cached_app is None:
+            _cached_app = create_app()
+        return _cached_app
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
