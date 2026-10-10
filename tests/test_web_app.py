@@ -47,3 +47,26 @@ def test_invalid_scan_returns_400() -> None:
     )
     assert response.status_code == 400
     assert b"not a valid decodable image" in response.data
+
+
+def test_metrics_page_renders_with_latest_data() -> None:
+    app = create_app({"TESTING": True})
+    client = app.test_client()
+    response = client.get("/metrics")
+    assert response.status_code == 200
+    body = response.data.decode("utf-8")
+    assert "Production benchmark" in body
+    assert "Development benchmark" in body
+    assert "RandomForest" in body
+    assert "CatBoost" in body
+    assert "Confusion matrix analysis" in body
+    assert "All 11 Models Overview Grid" in body
+
+
+def test_confusion_matrix_asset_route() -> None:
+    app = create_app({"TESTING": True})
+    client = app.test_client()
+    response = client.get("/confusion-matrices/ALL_MODELS_confusion_matrix_overview.png")
+    assert response.status_code == 200
+    assert response.mimetype == "image/png"
+

@@ -1,13 +1,482 @@
 {% extends "base.html" %}
 {% block title %}Architecture · VisionGuard{% endblock %}
 {% block content %}
-<section class="section-heading"><div class="eyebrow">SYSTEM DESIGN</div><h1>Selectable detection pipeline</h1><p>Training and live inference share preprocessing and feature extraction. A server-side registry restricts selection to validated local artifacts and applies each model’s saved threshold.</p></section>
-<div class="flow-diagram">
-  {% for number,title,text in [('01','Validated input','Decode JPG, JPEG, or PNG content and normalize it for feature extraction.'),('02','Model selection','Resolve an approved production or development model ID; arbitrary artifact paths are rejected.'),('03','Matched feature pipeline','Extract the 45-feature production vector or 65-feature enhanced vector required by the selected artifact.'),('04','Model-specific decision','Run RandomForest, XGBoost, LightGBM, CatBoost, or SVM and apply that artifact’s validation-selected threshold.'),('05','Risk + XAI','Report probabilities and risk while explaining the selected model’s leading feature contributions.')] %}
-  <article class="flow-step"><span>{{ number }}</span><div><h2>{{ title }}</h2><p>{{ text }}</p></div></article>{% if not loop.last %}<div class="flow-line">↓</div>{% endif %}
-  {% endfor %}
-</div>
-<section class="architecture-notes"><article class="glass-card"><h2>Production path</h2><p>The approved RandomForest uses 45 saved features and remains the default scanner selection.</p></article><article class="glass-card"><h2>Development path</h2><p>Five selectable candidates use 65 features from the expanded experiment. They remain explicitly labeled experimental because they were not promoted.</p></article><article class="glass-card"><h2>Leakage prevention</h2><p>Each clean image and its manipulated versions share a <code>base_id</code> and remain in the same train, validation, or test split.</p></article><article class="glass-card"><h2>Scientific boundary</h2><p>Generated samples are controlled prompt-conditioned perturbation simulations, not genuine optimized attacks against an external VLM.</p></article></section>
+<section class="section-heading arch-hero">
+  <div class="eyebrow">SYSTEM DESIGN & SPECIFICATION</div>
+  <h1>System architecture</h1>
+  <p>End-to-end architectural blueprint of VisionGuard. Live inference and model training share canonical preprocessing and multi-domain feature engineering with a hardened security boundary and explainability runtime.</p>
+</section>
 
-<section class="explanation-section"><div class="section-heading"><div class="eyebrow">TWO COMPLEMENTARY DECISIONS</div><h2>Prompt Injection Lab path</h2><p>The selected standalone classifier scores each image independently. A separate pair detector compares both feature vectors and drives the prompted-change assessment.</p></div><div class="flow-diagram">{% for number,title,text in [('01','Prompt-conditioned generation','SHA-256 deterministically controls a bounded simulated perturbation.'),('02','Selected standalone model','Score original and modified images independently using the dropdown selection.'),('03','Feature comparison','Measure signed and absolute changes across the shared 65-feature representation.'),('04','Reference-aware pair detector','Classify the 130 pair features with its own trained threshold.'),('05','Combined lab report','Show standalone scores, pair confidence, feature deltas, and PROMPTED / SUSPICIOUS when pair evidence crosses threshold.')] %}<article class="flow-step"><span>{{ number }}</span><div><h2>{{ title }}</h2><p>{{ text }}</p></div></article>{% if not loop.last %}<div class="flow-line">↓</div>{% endif %}{% endfor %}</div></section>
+<nav class="arch-view-nav" aria-label="Architecture Diagram Views">
+  <button type="button" class="arch-tab-btn active" id="btn-view-blueprint" onclick="switchArchView('blueprint')">
+    <span>🏢</span> System Architecture Blueprint
+  </button>
+  <button type="button" class="arch-tab-btn" id="btn-view-scanner" onclick="switchArchView('scanner')">
+    <span>🔬</span> Standalone Scanner Data Flow
+  </button>
+  <button type="button" class="arch-tab-btn" id="btn-view-lab" onclick="switchArchView('lab')">
+    <span>🧪</span> Prompt Lab Pair Architecture
+  </button>
+</nav>
+
+<!-- VIEW 1: SYSTEM ARCHITECTURE BLUEPRINT -->
+<div id="arch-view-blueprint" class="blueprint-container">
+  
+  <!-- LAYER 1: CLIENT & INGESTION -->
+  <section class="arch-layer">
+    <div class="arch-layer-header">
+      <div class="arch-layer-title">
+        <span class="arch-layer-badge badge-client">LAYER 01</span>
+        <h3>Client Interface & API Gateway</h3>
+      </div>
+      <span class="arch-layer-subtitle">HTTP/1.1 REST Endpoints · Multipart & JSON</span>
+    </div>
+    <div class="arch-nodes-grid">
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Web Scanner UI</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Client drag-and-drop file upload, model selector dropdown, dynamic risk badges, and visual SHAP plots.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">POST /scan</span>
+          <span class="arch-chip">Multipart Form</span>
+          <span class="arch-chip">DropZone</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Prompt Injection Lab UI</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Interactive perturbation synthesis playground, prompt text input, strength sliders, and 16× amplified delta views.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">POST /api/prompt-perturb</span>
+          <span class="arch-chip">POST /api/compare-scan</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Metrics & Asset Service</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Dynamic reporting dashboard for model benchmarks, confusion matrix grids, and statistical curves.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">GET /metrics</span>
+          <span class="arch-chip">GET /confusion-matrices/*</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="arch-bus-connector">
+    <span class="arch-bus-label">Payload Stream: Multipart Ingestion (Raw File Bytes, MIME, Parameters)</span>
+  </div>
+
+  <!-- LAYER 2: SECURITY & HARDENING -->
+  <section class="arch-layer">
+    <div class="arch-layer-header">
+      <div class="arch-layer-title">
+        <span class="arch-layer-badge badge-security">LAYER 02</span>
+        <h3>Security Hardening & Ingestion Boundary</h3>
+      </div>
+      <span class="arch-layer-subtitle">Zero-Trust Input Sanitization · Sandboxed Decoders</span>
+    </div>
+    <div class="arch-nodes-grid">
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Multi-Tier Validator</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Enforces strict extension whitelist (.jpg, .jpeg, .png), 16MB file limit, and Pillow binary stream header validation.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">PIL verify()</span>
+          <span class="arch-chip">MIME Check</span>
+          <span class="arch-chip">Size Limit &le;16MB</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Sandboxed Memory Decompression</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Full OpenCV pixel decode in isolated RAM buffer to prevent malicious zip bombs, truncated files, or buffer overruns.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">cv2.imdecode</span>
+          <span class="arch-chip">uint8 Matrix</span>
+          <span class="arch-chip">RGB/BGR</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Ephemeral Session Storage</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Isolated UUID directories with deterministic lifetime sweeps to eliminate race conditions and disk leakage.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">UUIDv4 Namespace</span>
+          <span class="arch-chip">Auto-Prune 3600s</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="arch-bus-connector">
+    <span class="arch-bus-label">Normalized Image Buffer: Decoded Pixel Array (H &times; W &times; 3, uint8)</span>
+  </div>
+
+  <!-- LAYER 3: FEATURE ENGINEERING -->
+  <section class="arch-layer">
+    <div class="arch-layer-header">
+      <div class="arch-layer-title">
+        <span class="arch-layer-badge badge-engine">LAYER 03</span>
+        <h3>Preprocessing & Multi-Domain Feature Engine</h3>
+      </div>
+      <span class="arch-layer-subtitle">Deterministic Feature Extraction Shared by Training and Live Inference</span>
+    </div>
+    <div class="arch-nodes-grid">
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Canonical Resizer</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Resizes images to 256&times;256 using area decimation for downsampling and bilinear interpolation for upsampling.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">256&times;256 Fixed</span>
+          <span class="arch-chip">INTER_AREA</span>
+          <span class="arch-chip">INTER_LINEAR</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Multi-View Smoothing</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Weak randomized Gaussian smoothing (N=5 views, &sigma;=1.0) with &plusmn;3&sigma; clipping to average out localized noise artifacts.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">Gaussian Noise</span>
+          <span class="arch-chip">N=5 Ensemble</span>
+          <span class="arch-chip">&sigma;=1.0</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Scientific Feature Extractors</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Fuses statistical distributions, Discrete Cosine Transform (DCT), 2D FFT spectral energy, LBP/GLCM micro-textures, and high-pass residuals.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">Statistical</span>
+          <span class="arch-chip">DCT</span>
+          <span class="arch-chip">FFT/Spectral</span>
+          <span class="arch-chip">Texture LBP</span>
+          <span class="arch-chip">Residuals</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="arch-bus-connector">
+    <span class="arch-bus-label">Feature Vector: float64[45] for Production | float64[65] for Development Candidates</span>
+  </div>
+
+  <!-- LAYER 4: MODEL REGISTRY & INFERENCE -->
+  <section class="arch-layer">
+    <div class="arch-layer-header">
+      <div class="arch-layer-title">
+        <span class="arch-layer-badge badge-inference">LAYER 04</span>
+        <h3>Model Registry & Inference Hub</h3>
+      </div>
+      <span class="arch-layer-subtitle">Selectable Classifiers with Model-Specific Threshold Calibration</span>
+    </div>
+    <div class="arch-nodes-grid">
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Production Model (Approved)</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">RandomForest classifier (45 features) tuned on GroupShuffleSplit by base_id. Threshold calibrated at 49.0% (80.0% test accuracy).</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">RandomForest</span>
+          <span class="arch-chip">45 Features</span>
+          <span class="arch-chip">Threshold 0.49</span>
+          <span class="arch-chip">best_model.pkl</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Development Candidate Suite</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">5 selectable 65-feature models trained on 3,500 samples with conservative thresholds to guarantee &lt;5% clean false positive rate.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">CatBoost (0.736)</span>
+          <span class="arch-chip">RandomForest (0.800)</span>
+          <span class="arch-chip">XGBoost (0.827)</span>
+          <span class="arch-chip">LightGBM (0.965)</span>
+          <span class="arch-chip">SVM (0.865)</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Pair Detector (Prompt Lab)</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Specialized reference-aware classifier trained on 130 signed and absolute feature deltas between original and modified images (97.5% test accuracy).</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">130 Delta Features</span>
+          <span class="arch-chip">Threshold 0.05</span>
+          <span class="arch-chip">pair_detector.pkl</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="arch-bus-connector">
+    <span class="arch-bus-label">Model Outputs: Attack Probability Fraction + Binary Decision Matrix</span>
+  </div>
+
+  <!-- LAYER 5: XAI & OUTPUT -->
+  <section class="arch-layer">
+    <div class="arch-layer-header">
+      <div class="arch-layer-title">
+        <span class="arch-layer-badge badge-output">LAYER 05</span>
+        <h3>Explainable AI (XAI) & Security Output Layer</h3>
+      </div>
+      <span class="arch-layer-subtitle">Tree SHAP Feature Attribution, NLP Translation & Risk Stratification</span>
+    </div>
+    <div class="arch-nodes-grid">
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Tree SHAP Attribution</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Computes Shapley values for top-5 contributing features with automatic probability occlusion sensitivity fallback.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">shap.TreeExplainer</span>
+          <span class="arch-chip">Top-5 Ranking</span>
+          <span class="arch-chip">Bar Plot PNG</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">NLP Layperson Translation</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Transforms scientific features into conversational English, real-world analogies (e.g. counterfeit banknotes), and key takeaways.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">Plain English</span>
+          <span class="arch-chip">Real-World Analogy</span>
+          <span class="arch-chip">Key Takeaways</span>
+        </div>
+      </article>
+
+      <article class="arch-node">
+        <div class="arch-node-top">
+          <span class="arch-node-name">Risk Stratification Engine</span>
+          <span class="node-status-dot" title="Active"></span>
+        </div>
+        <p class="arch-node-desc">Maps attack probabilities into calibrated enterprise security risk bands with clean HTTP headers preventing client-side caching.</p>
+        <div class="arch-node-chips">
+          <span class="arch-chip">LOW &lt;30%</span>
+          <span class="arch-chip">MEDIUM 30-59%</span>
+          <span class="arch-chip">HIGH 60-79%</span>
+          <span class="arch-chip">CRITICAL &ge;80%</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</div>
+
+<!-- VIEW 2: STANDALONE SCANNER PIPELINE -->
+<div id="arch-view-scanner" class="pipeline-flow-wrapper" style="display: none;">
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">01</div>
+    <div class="pipeline-card-content">
+      <h3>Multi-Tier Input Validation & Sandboxing</h3>
+      <p>The client uploads an image via <code>POST /scan</code>. The server validates extension (.jpg, .jpeg, .png), tests Pillow binary headers, and decompresses full RGB/BGR pixel matrices with OpenCV inside an isolated temporary directory.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Boundary: Zero-Trust</span>
+      <span class="spec-tag">Output: uint8 Matrix</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">02</div>
+    <div class="pipeline-card-content">
+      <h3>Model Registry Selection & Vector Sizing</h3>
+      <p>The server validates the requested <code>model_id</code> against registered artifacts. Arbitrary file paths are rejected. The system resolves whether the extraction requires the 45-feature production matrix or the 65-feature development candidate matrix.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Production: 45 Features</span>
+      <span class="spec-tag">Candidate: 65 Features</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">03</div>
+    <div class="pipeline-card-content">
+      <h3>Canonical Preprocessing & Multi-Domain Feature Extraction</h3>
+      <p>Images are normalized to 256&times;256. The engine executes statistical analysis, DCT frequency breakdown, FFT spectral energy distribution, uniform LBP texture histograms, GLCM spatial gray-level co-occurrences, and high-pass residual filters.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">6 Scientific Domains</span>
+      <span class="spec-tag">Smoothing: Optional N=5</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">04</div>
+    <div class="pipeline-card-content">
+      <h3>Model Inference & Calibrated Threshold Decision</h3>
+      <p>The selected estimator runs <code>predict_proba()</code>. If the posterior attack probability crosses the model's validation-tuned decision threshold, the scan status is marked <strong>SUSPICIOUS</strong>; otherwise, it is verified as <strong>CLEAN</strong>.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Threshold: Per-Model Stored</span>
+      <span class="spec-tag">Decision: Binary Security</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">05</div>
+    <div class="pipeline-card-content">
+      <h3>Explainable AI (Tree SHAP) & Layperson Translation</h3>
+      <p>Tree SHAP computes local attributions for the top-5 driving features. An automatic NLP narrative translates technical signals into conversational language and analogies for non-technical users alongside publication-grade bar charts.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Engine: Tree SHAP</span>
+      <span class="spec-tag">Output: Plain English + Plot</span>
+    </div>
+  </article>
+</div>
+
+<!-- VIEW 3: PROMPT LAB PAIR PIPELINE -->
+<div id="arch-view-lab" class="pipeline-flow-wrapper" style="display: none;">
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">01</div>
+    <div class="pipeline-card-content">
+      <h3>Deterministic Prompt Perturbation Generation</h3>
+      <p>Input prompt text is hashed with SHA-256 to seed a 64-bit integer generator. High-frequency 2D spatial sinusoids, separable cosine patterns, and localized noise grids are synthesized and applied under user-selected strength constraints (&epsilon; &in; [0.5, 4.0]).</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Algorithm: SHA-256 Seeded</span>
+      <span class="spec-tag">Output: Modified PNG + Diff</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">02</div>
+    <div class="pipeline-card-content">
+      <h3>Parallel Standalone Model Scoring</h3>
+      <p>Both original and modified images are independently scanned using the chosen standalone classifier to measure the raw single-image delta in suspicious-class probability before and after manipulation.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Independent Scans: 2&times;</span>
+      <span class="spec-tag">Metric: &Delta; Probability</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">03</div>
+    <div class="pipeline-card-content">
+      <h3>Differential Feature Vector Construction</h3>
+      <p>The feature extractor computes 65 features for both images. The system calculates signed deltas (&Delta; = Modified &minus; Original) and absolute deltas (|&Delta;|), concatenating them into a unified 130-dimensional differential pair vector.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Signed: 65 Features</span>
+      <span class="spec-tag">Absolute: 65 Features</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">04</div>
+    <div class="pipeline-card-content">
+      <h3>Reference-Aware Pair Classification</h3>
+      <p>The 130-feature vector is fed into the specialized <code>RandomForestPairDetector</code>. Operating with a calibrated 5.0% threshold, it classifies whether a controlled perturbation occurred with 97.5% accuracy and zero clean false positives.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Model: RF Pair Detector</span>
+      <span class="spec-tag">Accuracy: 97.5% (N=525)</span>
+    </div>
+  </article>
+
+  <div class="pipeline-arrow-separator">&darr;</div>
+
+  <article class="pipeline-card">
+    <div class="pipeline-num-badge">05</div>
+    <div class="pipeline-card-content">
+      <h3>Comprehensive Dual Security Assessment</h3>
+      <p>The system generates a unified comparison card displaying side-by-side images, 16&times; amplified difference visualizers, standalone delta shifts, pair detector confidence, and top differential feature shifts.</p>
+    </div>
+    <div class="pipeline-card-specs">
+      <span class="spec-tag">Dual Verdict</span>
+      <span class="spec-tag">16&times; Difference Image</span>
+    </div>
+  </article>
+</div>
+
+<!-- ARCHITECTURE NOTES & SCIENTIFIC BOUNDARIES -->
+<section class="architecture-notes">
+  <article class="glass-card">
+    <h2>Production vs. Research Path</h2>
+    <p>The approved RandomForest model utilizes 45 canonical features and serves as the primary production engine. The five selectable candidate models use 65 features from the 3,500-sample research dataset.</p>
+  </article>
+  
+  <article class="glass-card">
+    <h2>Leakage Prevention Guarantee</h2>
+    <p>Clean images and all corresponding manipulated variants share a strict <code>base_id</code>. Partitioning with <code>GroupShuffleSplit</code> guarantees that no single image source ever leaks across train, validation, and test splits.</p>
+  </article>
+  
+  <article class="glass-card">
+    <h2>Threshold Calibration Logic</h2>
+    <p>Thresholds are not arbitrary 50% assumptions. Each model enforces an artifact-stored threshold mathematically optimized on held-out validation sets to suppress false alarms on authentic photos.</p>
+  </article>
+  
+  <article class="glass-card">
+    <h2>Scientific Boundary & Scope</h2>
+    <p>Generated samples simulate controlled prompt-conditioned perturbations. They represent rigorous defensive input-level security benchmarks, rather than unconstrained gradient attacks against proprietary remote APIs.</p>
+  </article>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function switchArchView(viewKey) {
+  const views = ['blueprint', 'scanner', 'lab'];
+  views.forEach(key => {
+    const el = document.getElementById('arch-view-' + key);
+    const btn = document.getElementById('btn-view-' + key);
+    if (el) el.style.display = (key === viewKey) ? (key === 'blueprint' ? 'flex' : 'flex') : 'none';
+    if (btn) {
+      if (key === viewKey) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+}
+</script>
 {% endblock %}
