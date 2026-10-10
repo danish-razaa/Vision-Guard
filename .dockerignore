@@ -1,0 +1,16 @@
+.venv/
+.venv-broken/
+__pycache__/
+*.pyc
+.git/
+.pytest_cache/
+.DS_Store
+data/raw/
+data/clean/
+data/clean_normalized/
+data/attacked/
+data/features/
+data/metadata/
+data/development/
+data/external_holdout/
+tests/

@@ -1,0 +1,74 @@
+{
+  "model_name": "RandomForest",
+  "threshold": 0.49,
+  "cohorts": {
+    "external_clean": {
+      "sample_count": 100,
+      "accuracy": 0.84,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": null,
+      "false_positive_rate": 0.16,
+      "false_negative_rate": null,
+      "mean_attack_probability": 0.35839999999999994,
+      "confusion_matrix": [
+        [
+          84,
+          16
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "by_source_dataset": {
+    "open-images-v7": {
+      "sample_count": 100,
+      "accuracy": 0.84,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": null,
+      "false_positive_rate": 0.16,
+      "false_negative_rate": null,
+      "mean_attack_probability": 0.35839999999999994,
+      "confusion_matrix": [
+        [
+          84,
+          16
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "by_attack_type": {
+    "clean": {
+      "sample_count": 100,
+      "accuracy": 0.84,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "roc_auc": null,
+      "false_positive_rate": 0.16,
+      "false_negative_rate": null,
+      "mean_attack_probability": 0.35839999999999994,
+      "confusion_matrix": [
+        [
+          84,
+          16
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "by_epsilon_range": {}
+}

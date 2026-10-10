@@ -1,0 +1,18 @@
+{
+  "old": {
+    "threshold": 0.49,
+    "held_out_clean_coco_fpr": 0.16,
+    "prompt_conditioned_recall": 0.14666666666666667,
+    "unseen_prompt_recall": 0.14666666666666667,
+    "prompt_mean_attack_probability": 0.35786666666666667,
+    "external_clean_fpr": 0.16
+  },
+  "candidate": {
+    "threshold": 0.7359779013997405,
+    "held_out_clean_coco_fpr": 0.12,
+    "prompt_conditioned_recall": 0.10666666666666667,
+    "unseen_prompt_recall": 0.10666666666666667,
+    "prompt_mean_attack_probability": 0.49176922301512055,
+    "external_clean_fpr": 0.05
+  }
+}

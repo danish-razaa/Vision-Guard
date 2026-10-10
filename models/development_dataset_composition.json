@@ -1,0 +1,26 @@
+{
+  "total_base_images": 500,
+  "bases_by_split": {
+    "test": 75,
+    "train": 350,
+    "validation": 75
+  },
+  "clean_samples": 500,
+  "manipulated_samples": 3000,
+  "by_attack_type": {
+    "checkerboard": 500,
+    "clean": 500,
+    "dct": 500,
+    "fft": 500,
+    "gaussian": 500,
+    "prompt_conditioned": 500,
+    "sinusoidal": 500
+  },
+  "by_strength_band": {
+    "high": 750,
+    "low": 750,
+    "medium": 750,
+    "none": 500,
+    "very-low": 750
+  }
+}

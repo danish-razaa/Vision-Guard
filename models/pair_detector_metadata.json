@@ -1,0 +1,49 @@
+{
+  "threshold": 0.05,
+  "feature_count": 130,
+  "validation": {
+    "precision": 1.0,
+    "recall": 0.9777777777777777,
+    "f1": 0.9887640449438202,
+    "roc_auc": 0.9888888888888889,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.022222222222222223,
+    "confusion_matrix": [
+      [
+        75,
+        0
+      ],
+      [
+        10,
+        440
+      ]
+    ]
+  },
+  "test": {
+    "precision": 1.0,
+    "recall": 0.9711111111111111,
+    "f1": 0.9853438556933484,
+    "roc_auc": 0.9855555555555555,
+    "false_positive_rate": 0.0,
+    "false_negative_rate": 0.028888888888888888,
+    "confusion_matrix": [
+      [
+        75,
+        0
+      ],
+      [
+        13,
+        437
+      ]
+    ]
+  },
+  "unseen_prompt_recall": 0.8266666666666667,
+  "unseen_prompt_count": 75,
+  "model_name": "RandomForestPairDetector",
+  "training_date": "2026-09-06T14:00:51.600839+00:00",
+  "class_semantics": {
+    "0": "no measured controlled change",
+    "1": "controlled perturbation detected"
+  },
+  "scope": "reference-aware Prompt Injection Lab comparison; not a standalone image detector"
+}

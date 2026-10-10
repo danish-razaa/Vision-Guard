@@ -1,0 +1,35 @@
+{
+  "split": "test",
+  "number_tested": 75,
+  "epsilon": 4.0,
+  "predicted_clean_original": 69,
+  "predicted_suspicious_original": 6,
+  "clean_false_positive_rate": 0.08,
+  "original_probability_mean": 48.463219702243805,
+  "original_probability_median": 45.4952746629715,
+  "original_probability_min": 18.446896970272064,
+  "original_probability_max": 91.35295152664185,
+  "transitions": {
+    "A": {
+      "count": 0,
+      "percentage": 0.0
+    },
+    "B": {
+      "count": 69,
+      "percentage": 92.0
+    },
+    "C": {
+      "count": 6,
+      "percentage": 8.0
+    },
+    "D": {
+      "count": 0,
+      "percentage": 0.0
+    }
+  },
+  "mean_risk_delta": 5.296324094136556,
+  "median_risk_delta": 3.4270942211151123,
+  "risk_delta_positive_percentage": 82.66666666666667,
+  "risk_delta_negative_percentage": 17.333333333333336,
+  "modified_probability_greater_percentage": 82.66666666666667
+}

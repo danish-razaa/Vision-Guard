@@ -8,17 +8,32 @@ htmlcov/
 .env
 .DS_Store
 
-# Generated datasets, uploads, artifacts, and trained models
+# Generated datasets, uploads, and raw features
 data/raw/*
 data/clean/*
 data/attacked/*
 data/features/*
 data/metadata/*
-models/*.pkl
-models/*.json
-models/*.csv
 static/uploads/*
-static/generated/*
+
+# Allow essential runtime models and evaluation metadata
+!models/best_model.pkl
+!models/feature_columns.pkl
+!models/model_metadata.json
+!models/model_metrics.json
+!models/model_metrics.csv
+!models/pair_detector.pkl
+!models/pair_feature_columns.pkl
+!models/pair_detector_metadata.json
+!models/candidate_best_model.pkl
+!models/candidate_feature_columns.pkl
+!models/candidate_model_metadata.json
+!models/candidate_all_model_results.json
+!models/candidates/
+!models/candidates/*.pkl
+!models/development_candidates/
+!models/development_candidates/*.pkl
+!models/*.json
 
 # Retain otherwise-empty runtime directories
 !data/**/.gitkeep

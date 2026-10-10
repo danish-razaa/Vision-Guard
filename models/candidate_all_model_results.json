@@ -1,0 +1,237 @@
+{
+  "RandomForest": {
+    "threshold": 0.7995873015873016,
+    "validation": {
+      "accuracy": 0.46095238095238095,
+      "precision": 0.9613259668508287,
+      "recall": 0.38666666666666666,
+      "f1": 0.5515055467511886,
+      "roc_auc": 0.7007851851851852,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.6133333333333333,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          276,
+          174
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.4723809523809524,
+      "precision": 0.9576719576719577,
+      "recall": 0.4022222222222222,
+      "f1": 0.5665101721439749,
+      "roc_auc": 0.7167703703703704,
+      "false_positive_rate": 0.10666666666666667,
+      "false_negative_rate": 0.5977777777777777,
+      "confusion_matrix": [
+        [
+          67,
+          8
+        ],
+        [
+          269,
+          181
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.10666666666666667,
+    "held_out_manipulated_recall": 0.4022222222222222,
+    "prompt_conditioned_recall": 0.10666666666666667,
+    "unseen_prompt_recall": 0.10666666666666667,
+    "external_clean_false_positive_rate": 0.03,
+    "external_clean_mean_attack_probability": 0.6316972474747475
+  },
+  "XGBoost": {
+    "threshold": 0.8268030881881714,
+    "validation": {
+      "accuracy": 0.4361904761904762,
+      "precision": 0.9583333333333334,
+      "recall": 0.35777777777777775,
+      "f1": 0.5210355987055016,
+      "roc_auc": 0.7135259259259259,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.6422222222222222,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          289,
+          161
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.44952380952380955,
+      "precision": 0.9653179190751445,
+      "recall": 0.3711111111111111,
+      "f1": 0.536115569823435,
+      "roc_auc": 0.7431111111111112,
+      "false_positive_rate": 0.08,
+      "false_negative_rate": 0.6288888888888889,
+      "confusion_matrix": [
+        [
+          69,
+          6
+        ],
+        [
+          283,
+          167
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.08,
+    "held_out_manipulated_recall": 0.3711111111111111,
+    "prompt_conditioned_recall": 0.06666666666666667,
+    "unseen_prompt_recall": 0.06666666666666667,
+    "external_clean_false_positive_rate": 0.04,
+    "external_clean_mean_attack_probability": 0.48019510254263875
+  },
+  "LightGBM": {
+    "threshold": 0.9646191284094653,
+    "validation": {
+      "accuracy": 0.45714285714285713,
+      "precision": 0.9608938547486033,
+      "recall": 0.38222222222222224,
+      "f1": 0.5468998410174881,
+      "roc_auc": 0.7111407407407407,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.6177777777777778,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          278,
+          172
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.4514285714285714,
+      "precision": 0.9764705882352941,
+      "recall": 0.3688888888888889,
+      "f1": 0.535483870967742,
+      "roc_auc": 0.739688888888889,
+      "false_positive_rate": 0.05333333333333334,
+      "false_negative_rate": 0.6311111111111111,
+      "confusion_matrix": [
+        [
+          71,
+          4
+        ],
+        [
+          284,
+          166
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.05333333333333334,
+    "held_out_manipulated_recall": 0.3688888888888889,
+    "prompt_conditioned_recall": 0.08,
+    "unseen_prompt_recall": 0.08,
+    "external_clean_false_positive_rate": 0.04,
+    "external_clean_mean_attack_probability": 0.6330409686916667
+  },
+  "CatBoost": {
+    "threshold": 0.7359779013997405,
+    "validation": {
+      "accuracy": 0.4838095238095238,
+      "precision": 0.9637305699481865,
+      "recall": 0.41333333333333333,
+      "f1": 0.578538102643857,
+      "roc_auc": 0.7171259259259259,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.5866666666666667,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          264,
+          186
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.49142857142857144,
+      "precision": 0.9552238805970149,
+      "recall": 0.4266666666666667,
+      "f1": 0.5898617511520737,
+      "roc_auc": 0.7264592592592592,
+      "false_positive_rate": 0.12,
+      "false_negative_rate": 0.5733333333333334,
+      "confusion_matrix": [
+        [
+          66,
+          9
+        ],
+        [
+          258,
+          192
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.12,
+    "held_out_manipulated_recall": 0.4266666666666667,
+    "prompt_conditioned_recall": 0.10666666666666667,
+    "unseen_prompt_recall": 0.10666666666666667,
+    "external_clean_false_positive_rate": 0.05,
+    "external_clean_mean_attack_probability": 0.4864892469374115
+  },
+  "SVM": {
+    "threshold": 0.8650504611302199,
+    "validation": {
+      "accuracy": 0.43047619047619046,
+      "precision": 0.9575757575757575,
+      "recall": 0.3511111111111111,
+      "f1": 0.5138211382113821,
+      "roc_auc": 0.7004,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.6488888888888888,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          292,
+          158
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.4095238095238095,
+      "precision": 0.9666666666666667,
+      "recall": 0.32222222222222224,
+      "f1": 0.48333333333333334,
+      "roc_auc": 0.7089925925925926,
+      "false_positive_rate": 0.06666666666666667,
+      "false_negative_rate": 0.6777777777777778,
+      "confusion_matrix": [
+        [
+          70,
+          5
+        ],
+        [
+          305,
+          145
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.06666666666666667,
+    "held_out_manipulated_recall": 0.32222222222222224,
+    "prompt_conditioned_recall": 0.08,
+    "unseen_prompt_recall": 0.08,
+    "external_clean_false_positive_rate": 0.04,
+    "external_clean_mean_attack_probability": 0.8474310615280504
+  }
+}

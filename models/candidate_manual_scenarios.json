@@ -1,0 +1,174 @@
+{
+  "clean_coco": {
+    "status": "VERIFIED/CLEAN",
+    "attack_probability": 35.33949553966522,
+    "clean_probability": 64.66050148010254,
+    "threshold": 82.10363388061523,
+    "risk_level": "MEDIUM",
+    "top_features": [
+      {
+        "feature_name": "lbp_uniform_bin_03",
+        "feature_value": 0.08441162109375,
+        "contribution": -0.45642372965812683,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_00",
+        "feature_value": 0.052947998046875,
+        "contribution": -0.26568692922592163,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_min",
+        "feature_value": 0.0,
+        "contribution": 0.16797953844070435,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "glcm_homogeneity_mean",
+        "feature_value": 0.8836040089518091,
+        "contribution": 0.13010533154010773,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_05",
+        "feature_value": 0.1281280517578125,
+        "contribution": -0.1294710487127304,
+        "feature_domain": "Texture"
+      }
+    ],
+    "explanation": "These features contributed most strongly to the model prediction. The leading signals came from Texture, Statistical domains. Positive contributions support the suspicious class and negative contributions support the clean class; these are model attributions, not causal conclusions.",
+    "xai_available": true,
+    "xai_method": "tree_shap",
+    "model_name": "XGBoost"
+  },
+  "clean_coco_prompt_conditioned": {
+    "status": "VERIFIED/CLEAN",
+    "attack_probability": 30.687430500984192,
+    "clean_probability": 69.31257247924805,
+    "threshold": 82.10363388061523,
+    "risk_level": "MEDIUM",
+    "top_features": [
+      {
+        "feature_name": "lbp_uniform_bin_03",
+        "feature_value": 0.085540771484375,
+        "contribution": -0.4472244083881378,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_00",
+        "feature_value": 0.05206298828125,
+        "contribution": -0.282265305519104,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_06",
+        "feature_value": 0.0745849609375,
+        "contribution": -0.22553224861621857,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_min",
+        "feature_value": 0.0,
+        "contribution": 0.1697433888912201,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "glcm_homogeneity_mean",
+        "feature_value": 0.8834312635190235,
+        "contribution": 0.13096363842487335,
+        "feature_domain": "Texture"
+      }
+    ],
+    "explanation": "These features contributed most strongly to the model prediction. The leading signals came from Texture, Statistical domains. Positive contributions support the suspicious class and negative contributions support the clean class; these are model attributions, not causal conclusions.",
+    "xai_available": true,
+    "xai_method": "tree_shap",
+    "model_name": "XGBoost"
+  },
+  "external_clean": {
+    "status": "VERIFIED/CLEAN",
+    "attack_probability": 33.758118748664856,
+    "clean_probability": 66.24188423156738,
+    "threshold": 82.10363388061523,
+    "risk_level": "MEDIUM",
+    "top_features": [
+      {
+        "feature_name": "lbp_uniform_bin_00",
+        "feature_value": 0.0455169677734375,
+        "contribution": -0.37199655175209045,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_max",
+        "feature_value": 255.0,
+        "contribution": 0.23019632697105408,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_05",
+        "feature_value": 0.1402130126953125,
+        "contribution": -0.15847434103488922,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_min",
+        "feature_value": 5.0,
+        "contribution": -0.15753711760044098,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_06",
+        "feature_value": 0.0662689208984375,
+        "contribution": -0.10189517587423325,
+        "feature_domain": "Texture"
+      }
+    ],
+    "explanation": "These features contributed most strongly to the model prediction. The leading signals came from Texture, Statistical domains. Positive contributions support the suspicious class and negative contributions support the clean class; these are model attributions, not causal conclusions.",
+    "xai_available": true,
+    "xai_method": "tree_shap",
+    "model_name": "XGBoost"
+  },
+  "external_clean_prompt_conditioned": {
+    "status": "VERIFIED/CLEAN",
+    "attack_probability": 32.0607453584671,
+    "clean_probability": 67.93925762176514,
+    "threshold": 82.10363388061523,
+    "risk_level": "MEDIUM",
+    "top_features": [
+      {
+        "feature_name": "lbp_uniform_bin_00",
+        "feature_value": 0.04656982421875,
+        "contribution": -0.3878785967826843,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_max",
+        "feature_value": 255.0,
+        "contribution": 0.22056707739830017,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_05",
+        "feature_value": 0.1403045654296875,
+        "contribution": -0.16634510457515717,
+        "feature_domain": "Texture"
+      },
+      {
+        "feature_name": "stat_min",
+        "feature_value": 4.0,
+        "contribution": -0.15682156383991241,
+        "feature_domain": "Statistical"
+      },
+      {
+        "feature_name": "lbp_uniform_bin_06",
+        "feature_value": 0.0662841796875,
+        "contribution": -0.10743195563554764,
+        "feature_domain": "Texture"
+      }
+    ],
+    "explanation": "These features contributed most strongly to the model prediction. The leading signals came from Texture, Statistical domains. Positive contributions support the suspicious class and negative contributions support the clean class; these are model attributions, not causal conclusions.",
+    "xai_available": true,
+    "xai_method": "tree_shap",
+    "model_name": "XGBoost"
+  }
+}

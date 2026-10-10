@@ -1,0 +1,66 @@
+{
+  "model_name": "CatBoost",
+  "training_date": "2026-09-06T13:52:19.537688+00:00",
+  "feature_count": 65,
+  "threshold": 0.7359779013997405,
+  "dataset_size": 3500,
+  "base_image_count": 500,
+  "split_method": "preassigned group-aware 70/15/15 by base_id",
+  "split_sample_counts": {
+    "train": 2450,
+    "validation": 525,
+    "test": 525
+  },
+  "metrics": {
+    "threshold": 0.7359779013997405,
+    "validation": {
+      "accuracy": 0.4838095238095238,
+      "precision": 0.9637305699481865,
+      "recall": 0.41333333333333333,
+      "f1": 0.578538102643857,
+      "roc_auc": 0.7171259259259259,
+      "false_positive_rate": 0.09333333333333334,
+      "false_negative_rate": 0.5866666666666667,
+      "confusion_matrix": [
+        [
+          68,
+          7
+        ],
+        [
+          264,
+          186
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.49142857142857144,
+      "precision": 0.9552238805970149,
+      "recall": 0.4266666666666667,
+      "f1": 0.5898617511520737,
+      "roc_auc": 0.7264592592592592,
+      "false_positive_rate": 0.12,
+      "false_negative_rate": 0.5733333333333334,
+      "confusion_matrix": [
+        [
+          66,
+          9
+        ],
+        [
+          258,
+          192
+        ]
+      ]
+    },
+    "held_out_clean_coco_fpr": 0.12,
+    "held_out_manipulated_recall": 0.4266666666666667,
+    "prompt_conditioned_recall": 0.10666666666666667,
+    "unseen_prompt_recall": 0.10666666666666667,
+    "external_clean_false_positive_rate": 0.05,
+    "external_clean_mean_attack_probability": 0.4864892469374115
+  },
+  "class_semantics": {
+    "0": "clean",
+    "1": "controlled_manipulated"
+  },
+  "result_scope": "development candidate; production artifacts not replaced"
+}

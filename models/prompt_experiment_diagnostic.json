@@ -1,0 +1,367 @@
+{
+  "model_classes": [
+    0,
+    1
+  ],
+  "class_semantics": {
+    "0": "CLEAN",
+    "1": "MANIPULATED"
+  },
+  "clean_class_index": 0,
+  "attack_class_index": 1,
+  "selected_threshold_percent": 49.0,
+  "feature_count": 45,
+  "feature_column_order": [
+    "stat_mean",
+    "stat_variance",
+    "stat_std",
+    "stat_skewness",
+    "stat_kurtosis",
+    "stat_shannon_entropy",
+    "stat_median",
+    "stat_min",
+    "stat_max",
+    "dct_total_energy",
+    "dct_low_energy",
+    "dct_mid_energy",
+    "dct_high_energy",
+    "dct_high_ratio",
+    "fft_magnitude_mean",
+    "fft_magnitude_std",
+    "fft_magnitude_max",
+    "fft_low_ratio",
+    "fft_mid_ratio",
+    "fft_high_ratio",
+    "spectral_entropy",
+    "lbp_uniform_bin_00",
+    "lbp_uniform_bin_01",
+    "lbp_uniform_bin_02",
+    "lbp_uniform_bin_03",
+    "lbp_uniform_bin_04",
+    "lbp_uniform_bin_05",
+    "lbp_uniform_bin_06",
+    "lbp_uniform_bin_07",
+    "lbp_uniform_bin_08",
+    "lbp_uniform_bin_09",
+    "glcm_contrast_mean",
+    "glcm_contrast_std",
+    "glcm_dissimilarity_mean",
+    "glcm_dissimilarity_std",
+    "glcm_homogeneity_mean",
+    "glcm_homogeneity_std",
+    "glcm_energy_mean",
+    "glcm_energy_std",
+    "glcm_correlation_mean",
+    "glcm_correlation_std",
+    "residual_mean_abs",
+    "residual_std",
+    "residual_energy",
+    "residual_max_abs"
+  ],
+  "smoothing_configuration": {
+    "enabled": false,
+    "views": 5,
+    "sigma": 1.0,
+    "light_blur": false
+  },
+  "original": {
+    "status": "SUSPICIOUS",
+    "clean_probability": 43.666666666666664,
+    "attack_probability": 56.333333333333336
+  },
+  "modified": {
+    "status": "VERIFIED/CLEAN",
+    "clean_probability": 56.00000000000001,
+    "attack_probability": 44.0
+  },
+  "risk_delta_percentage_points": -12.333333333333336,
+  "top_15_feature_changes": [
+    {
+      "feature_name": "dct_low_energy",
+      "feature_domain": "DCT",
+      "original_value": 40863.76593501558,
+      "modified_value": 40663.4597581222,
+      "absolute_delta": 200.30617689338396,
+      "signed_delta": -200.30617689338396,
+      "relative_delta": 0.004901804136503837
+    },
+    {
+      "feature_name": "dct_total_energy",
+      "feature_domain": "DCT",
+      "original_value": 40941.26835610579,
+      "modified_value": 40741.031808061634,
+      "absolute_delta": 200.23654804415855,
+      "signed_delta": -200.23654804415855,
+      "relative_delta": 0.004890824248592098
+    },
+    {
+      "feature_name": "fft_magnitude_max",
+      "feature_domain": "FFT/Spectral",
+      "original_value": 47046.23921568628,
+      "modified_value": 46946.82352941176,
+      "absolute_delta": 99.41568627451488,
+      "signed_delta": -99.41568627451488,
+      "relative_delta": 0.0021131484244412773
+    },
+    {
+      "feature_name": "stat_variance",
+      "feature_domain": "Statistical",
+      "original_value": 7112.364315312123,
+      "modified_value": 7055.152697503567,
+      "absolute_delta": 57.211617808556184,
+      "signed_delta": -57.211617808556184,
+      "relative_delta": 0.008043966151366289
+    },
+    {
+      "feature_name": "stat_median",
+      "feature_domain": "Statistical",
+      "original_value": 254.0,
+      "modified_value": 253.0,
+      "absolute_delta": 1.0,
+      "signed_delta": -1.0,
+      "relative_delta": 0.003937007874015748
+    },
+    {
+      "feature_name": "stat_min",
+      "feature_domain": "Statistical",
+      "original_value": 11.0,
+      "modified_value": 12.0,
+      "absolute_delta": 1.0,
+      "signed_delta": 1.0,
+      "relative_delta": 0.09090909090909091
+    },
+    {
+      "feature_name": "fft_magnitude_std",
+      "feature_domain": "FFT/Spectral",
+      "original_value": 202.05391871306634,
+      "modified_value": 201.55839555901545,
+      "absolute_delta": 0.4955231540508862,
+      "signed_delta": -0.4955231540508862,
+      "relative_delta": 0.0024524303077465724
+    },
+    {
+      "feature_name": "stat_shannon_entropy",
+      "feature_domain": "Statistical",
+      "original_value": 4.714179215353628,
+      "modified_value": 5.130938639785474,
+      "absolute_delta": 0.416759424431846,
+      "signed_delta": 0.416759424431846,
+      "relative_delta": 0.08840551141426713
+    },
+    {
+      "feature_name": "stat_mean",
+      "feature_domain": "Statistical",
+      "original_value": 183.05650329589844,
+      "modified_value": 182.669677734375,
+      "absolute_delta": 0.3868255615234375,
+      "signed_delta": -0.3868255615234375,
+      "relative_delta": 0.0021131484244411693
+    },
+    {
+      "feature_name": "stat_std",
+      "feature_domain": "Statistical",
+      "original_value": 84.33483453065004,
+      "modified_value": 83.99495638134213,
+      "absolute_delta": 0.33987814930790705,
+      "signed_delta": -0.33987814930790705,
+      "relative_delta": 0.004030103944585131
+    },
+    {
+      "feature_name": "lbp_uniform_bin_08",
+      "feature_domain": "Texture",
+      "original_value": 0.492462158203125,
+      "modified_value": 0.2967376708984375,
+      "absolute_delta": 0.1957244873046875,
+      "signed_delta": -0.1957244873046875,
+      "relative_delta": 0.39744066431182995
+    },
+    {
+      "feature_name": "lbp_uniform_bin_05",
+      "feature_domain": "Texture",
+      "original_value": 0.1015777587890625,
+      "modified_value": 0.159149169921875,
+      "absolute_delta": 0.0575714111328125,
+      "signed_delta": 0.0575714111328125,
+      "relative_delta": 0.5667718191377498
+    },
+    {
+      "feature_name": "dct_mid_energy",
+      "feature_domain": "DCT",
+      "original_value": 73.55666989997371,
+      "modified_value": 73.60869720099697,
+      "absolute_delta": 0.05202730102325859,
+      "signed_delta": 0.05202730102325859,
+      "relative_delta": 0.0007073090869122826
+    },
+    {
+      "feature_name": "lbp_uniform_bin_09",
+      "feature_domain": "Texture",
+      "original_value": 0.0571441650390625,
+      "modified_value": 0.106109619140625,
+      "absolute_delta": 0.0489654541015625,
+      "signed_delta": 0.0489654541015625,
+      "relative_delta": 0.8568758344459279
+    },
+    {
+      "feature_name": "lbp_uniform_bin_03",
+      "feature_domain": "Texture",
+      "original_value": 0.0665130615234375,
+      "modified_value": 0.104888916015625,
+      "absolute_delta": 0.0383758544921875,
+      "signed_delta": 0.0383758544921875,
+      "relative_delta": 0.5769671943106217
+    }
+  ],
+  "top_15_shap_changes": [
+    {
+      "feature_name": "lbp_uniform_bin_05",
+      "feature_domain": "Texture",
+      "original_value": 0.1015777587890625,
+      "modified_value": 0.159149169921875,
+      "original_shap_contribution": 0.047291529051166264,
+      "modified_shap_contribution": -0.03993793214911469,
+      "shap_delta": -0.08722946120028095,
+      "absolute_shap_delta": 0.08722946120028095
+    },
+    {
+      "feature_name": "lbp_uniform_bin_03",
+      "feature_domain": "Texture",
+      "original_value": 0.0665130615234375,
+      "modified_value": 0.104888916015625,
+      "original_shap_contribution": 0.01782268745540489,
+      "modified_shap_contribution": -0.012921305419030133,
+      "shap_delta": -0.030743992874435022,
+      "absolute_shap_delta": 0.030743992874435022
+    },
+    {
+      "feature_name": "lbp_uniform_bin_04",
+      "feature_domain": "Texture",
+      "original_value": 0.1151123046875,
+      "modified_value": 0.1152496337890625,
+      "original_shap_contribution": 0.043164217426030195,
+      "modified_shap_contribution": 0.049399858919677596,
+      "shap_delta": 0.006235641493647401,
+      "absolute_shap_delta": 0.006235641493647401
+    },
+    {
+      "feature_name": "glcm_energy_mean",
+      "feature_domain": "Texture",
+      "original_value": 0.5503435041412368,
+      "modified_value": 0.5503701513337406,
+      "original_shap_contribution": -0.01647759401956602,
+      "modified_shap_contribution": -0.01087936021782328,
+      "shap_delta": 0.005598233801742741,
+      "absolute_shap_delta": 0.005598233801742741
+    },
+    {
+      "feature_name": "glcm_energy_std",
+      "feature_domain": "Texture",
+      "original_value": 0.0027851576724818466,
+      "modified_value": 0.002797629221579719,
+      "original_shap_contribution": 0.0028300870068790336,
+      "modified_shap_contribution": 0.007954353946082187,
+      "shap_delta": 0.005124266939203153,
+      "absolute_shap_delta": 0.005124266939203153
+    },
+    {
+      "feature_name": "lbp_uniform_bin_02",
+      "feature_domain": "Texture",
+      "original_value": 0.029449462890625,
+      "modified_value": 0.0299224853515625,
+      "original_shap_contribution": -0.02060827634734456,
+      "modified_shap_contribution": -0.02559897480580106,
+      "shap_delta": -0.0049906984584565,
+      "absolute_shap_delta": 0.0049906984584565
+    },
+    {
+      "feature_name": "lbp_uniform_bin_01",
+      "feature_domain": "Texture",
+      "original_value": 0.0324554443359375,
+      "modified_value": 0.0460662841796875,
+      "original_shap_contribution": -0.017625756347638768,
+      "modified_shap_contribution": -0.02242359115456989,
+      "shap_delta": -0.0047978348069311234,
+      "absolute_shap_delta": 0.0047978348069311234
+    },
+    {
+      "feature_name": "lbp_uniform_bin_08",
+      "feature_domain": "Texture",
+      "original_value": 0.492462158203125,
+      "modified_value": 0.2967376708984375,
+      "original_shap_contribution": 0.013252411317813934,
+      "modified_shap_contribution": 0.008667362078542799,
+      "shap_delta": -0.004585049239271135,
+      "absolute_shap_delta": 0.004585049239271135
+    },
+    {
+      "feature_name": "lbp_uniform_bin_09",
+      "feature_domain": "Texture",
+      "original_value": 0.0571441650390625,
+      "modified_value": 0.106109619140625,
+      "original_shap_contribution": -0.012263103453183731,
+      "modified_shap_contribution": -0.016842969600776924,
+      "shap_delta": -0.004579866147593193,
+      "absolute_shap_delta": 0.004579866147593193
+    },
+    {
+      "feature_name": "fft_mid_ratio",
+      "feature_domain": "FFT/Spectral",
+      "original_value": 0.0017855065713883193,
+      "modified_value": 0.0017947758550135846,
+      "original_shap_contribution": -0.001301538934652217,
+      "modified_shap_contribution": -0.005789461144749982,
+      "shap_delta": -0.004487922210097765,
+      "absolute_shap_delta": 0.004487922210097765
+    },
+    {
+      "feature_name": "stat_mean",
+      "feature_domain": "Statistical",
+      "original_value": 183.05650329589844,
+      "modified_value": 182.669677734375,
+      "original_shap_contribution": -0.002022468375327104,
+      "modified_shap_contribution": 0.0013403024949854819,
+      "shap_delta": 0.003362770870312586,
+      "absolute_shap_delta": 0.003362770870312586
+    },
+    {
+      "feature_name": "stat_shannon_entropy",
+      "feature_domain": "Statistical",
+      "original_value": 4.714179215353628,
+      "modified_value": 5.130938639785474,
+      "original_shap_contribution": -0.01777428952458298,
+      "modified_shap_contribution": -0.01462868995191223,
+      "shap_delta": 0.00314559957267075,
+      "absolute_shap_delta": 0.00314559957267075
+    },
+    {
+      "feature_name": "stat_max",
+      "feature_domain": "Statistical",
+      "original_value": 255.0,
+      "modified_value": 255.0,
+      "original_shap_contribution": 0.010622954791366582,
+      "modified_shap_contribution": 0.007716090908239871,
+      "shap_delta": -0.0029068638831267106,
+      "absolute_shap_delta": 0.0029068638831267106
+    },
+    {
+      "feature_name": "stat_std",
+      "feature_domain": "Statistical",
+      "original_value": 84.33483453065004,
+      "modified_value": 83.99495638134213,
+      "original_shap_contribution": 0.0036669199875385724,
+      "modified_shap_contribution": 0.001464411612228837,
+      "shap_delta": -0.0022025083753097353,
+      "absolute_shap_delta": 0.0022025083753097353
+    },
+    {
+      "feature_name": "lbp_uniform_bin_00",
+      "feature_domain": "Texture",
+      "original_value": 0.0198211669921875,
+      "modified_value": 0.0206146240234375,
+      "original_shap_contribution": -0.06292525632722598,
+      "modified_shap_contribution": -0.06078660948981987,
+      "shap_delta": 0.0021386468374061107,
+      "absolute_shap_delta": 0.0021386468374061107
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "model_name": "RandomForest",
+  "training_date": "2026-08-10T20:07:24.859670+00:00",
+  "feature_count": 45,
+  "dataset_size": 200,
+  "clean_count": 100,
+  "attack_count": 100,
+  "split_method": "GroupShuffleSplit 70/15/15 by base_id",
+  "split_counts": {
+    "train": 140,
+    "validation": 30,
+    "test": 30
+  },
+  "metrics": {
+    "threshold": 0.49,
+    "validation": {
+      "accuracy": 0.8666666666666667,
+      "precision": 0.8235294117647058,
+      "recall": 0.9333333333333333,
+      "f1": 0.875,
+      "roc_auc": 0.8977777777777778,
+      "confusion_matrix": [
+        [
+          12,
+          3
+        ],
+        [
+          1,
+          14
+        ]
+      ]
+    },
+    "test": {
+      "accuracy": 0.8,
+      "precision": 0.8461538461538461,
+      "recall": 0.7333333333333333,
+      "f1": 0.7857142857142857,
+      "roc_auc": 0.9133333333333333,
+      "confusion_matrix": [
+        [
+          13,
+          2
+        ],
+        [
+          4,
+          11
+        ]
+      ]
+    }
+  },
+  "threshold": 0.49,
+  "software_versions": {
+    "python": "3.12.4",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit-learn": "1.9.0",
+    "xgboost": "3.4.0",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.10"
+  },
+  "seed": 42,
+  "class_semantics": {
+    "0": "clean",
+    "1": "attack"
+  },
+  "smoothing": {
+    "enabled": false,
+    "views": 1,
+    "sigma": 0.0
+  },
+  "result_scope": "engineering smoke-test; not final project results"
+}

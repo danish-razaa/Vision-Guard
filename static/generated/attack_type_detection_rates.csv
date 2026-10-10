@@ -1,0 +1,6 @@
+attack_type,sample_count,detected_count,detection_rate
+gaussian,2,2,1.0
+sinusoidal,1,1,1.0
+checkerboard,3,3,1.0
+dct,5,5,1.0
+fft,4,4,1.0
